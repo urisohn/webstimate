@@ -1,0 +1,4 @@
+	#Welcome to R syntax
+		source("/home/urisoh5/public_html/webstimate.org/twolines/preview.r")
+		preview("1775551282","sav")
+	#end R Syntax;

@@ -1,0 +1,81 @@
+RESULT 1: First interrupted regression, we obtain coefficient for xlow1 from here (blue line):
+
+
+Call:
+glm(formula = as.formula(format(glm1.f)), family = family)
+
+Deviance Residuals: 
+     Min        1Q    Median        3Q       Max  
+-2.27798  -0.35755   0.00257   0.36027   1.51841  
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  3.45197    0.04436  77.815  < 2e-16 ***
+xlow1       -0.07899    0.03118  -2.534 0.011503 *  
+xhigh1       0.25477    0.06651   3.831 0.000139 ***
+high1       -0.09886    0.07200  -1.373 0.170175    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for gaussian family taken to be 0.2995894)
+
+    Null deviance: 217.88  on 709  degrees of freedom
+Residual deviance: 211.51  on 706  degrees of freedom
+AIC: 1165.1
+
+Number of Fisher Scoring iterations: 2
+
+Note:  The standard errors above are homoskedasticity assuming, the two-lines test  uses  heteroskedastic robust ('HC1'). Those are reported below (with z rather than t tests)
+
+z test of coefficients:
+
+             Estimate Std. Error z value  Pr(>|z|)    
+(Intercept)  3.451971   0.044603 77.3932 < 2.2e-16 ***
+xlow1       -0.078990   0.034802 -2.2697 0.0232264 *  
+xhigh1       0.254775   0.067743  3.7609 0.0001693 ***
+high1       -0.098865   0.069778 -1.4168 0.1565285    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+==========================================================================================
+
+RESULT 2: Second interrupted regression, we obtain coefficient for xhigh2 from here (red line):
+
+
+Call:
+glm(formula = as.formula(format(glm2.f)), family = family)
+
+Deviance Residuals: 
+     Min        1Q    Median        3Q       Max  
+-2.28481  -0.34841   0.00421   0.36033   1.49950  
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  3.47606    0.04967  69.983  < 2e-16 ***
+xlow2       -0.06518    0.03370  -1.934   0.0535 .  
+xhigh2       0.25369    0.06096   4.162 3.55e-05 ***
+high2       -0.12179    0.06983  -1.744   0.0816 .  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for gaussian family taken to be 0.2991008)
+
+    Null deviance: 217.88  on 709  degrees of freedom
+Residual deviance: 211.17  on 706  degrees of freedom
+AIC: 1163.9
+
+Number of Fisher Scoring iterations: 2
+
+Now, heteroskedastic robust:
+
+z test of coefficients:
+
+             Estimate Std. Error z value  Pr(>|z|)    
+(Intercept)  3.476058   0.051180 67.9185 < 2.2e-16 ***
+xlow2       -0.065182   0.038181 -1.7072   0.08779 .  
+xhigh2       0.253686   0.061852  4.1015 4.104e-05 ***
+high2       -0.121786   0.068650 -1.7740   0.07606 .  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+==========================================================================================

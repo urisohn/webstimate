@@ -1,0 +1,445 @@
+  
+#Function that creates Hyp-Charts
+#Written by Uri Simonsohn, urisohn@gmail.com
+#Last update: 2019 09 06
+###########################################################
+
+  options(scipen=999) #avoid scientific notation
+  
+  rm(list = ls())      #clear everything
+  library(BayesFactor) #used to compute.. Bayes Factors
+  
+  #Function 1- Format p-values nicely 
+      cleanp=function(p)
+      {
+        p.clean=round(p, 4)        #Round it
+        p.clean=paste0("p = ",p.clean)
+        if (p <= .0001) p.clean= "p < .0001"
+        if (p > .9999) p.clean= "p > .9999"
+        return(p.clean)
+      }  
+      
+   #Function 2 - Format likelihood for presentation in chart
+      cleanr=function(r) {
+         #Round to 1 decimal if <100, 0 otherwise
+                v=ifelse(r<100,round(r,1),round(r))
+         #If biger than 1000 express in k
+                v=ifelse(r>1000,paste0(round(r/1000)," k"),v)
+         # If bigger than 100k just say that
+                v=ifelse(r>100000,">100 k",v)
+                v
+      }
+      
+      
+     #Function 3 - Simplify notation and output of how Bayes Factor is calculated 
+         bf=function(n,d) {
+              t=(d/2)*sqrt(2*n)
+              #cat("d=",d,"-->=",t,"\n")
+              exp(ttest.tstat(t,n1=n,n2=n)$bf)
+           }
+
+    #Function 4 - The HypChart function
+    hyp.chart=function(d.obs=NA,n,ylim=NA,p.obs=NA,
+      main1="Hyp-Chart: Null vs. Every Alternative",
+      main2= bquote("n="*.(n)*"  |  "*hat(d)*"="*.(round(d.obs,2))*"   |  "*.(p.obs.clean)),
+      show.bayes=FALSE,  #True to estimate Bayes Factor and disply weight given to each hypothesis
+      pos.shirts=c(3,3,3), #where to put the value labels for the shirts
+      pos.hat=1,              #where to put the value label for the hat
+      png.file=NA)   {
+      
+      #Syntax:
+        #d.obs: the observed effect size in a difference of means between sampe test, in Cohen d's
+        #p.obs: the p-value in the difference of means test
+        #Note: only assign one of the above two: p or d
+      
+        #n:     sample size
+        #ylim: in case you want to change the default size of the y-axis
+        #main1 & main2: headers
+        #show.bayes: TRUE or FALSE, with TRUE it compute and reports a bayes factor, and changes size of dots to proportional weight
+        #pos.shirts: positioning of value labels for the S,M,L effects, default is all three on top of figure 3, 1,2,3,4 are for bottom, left, top, right
+        #pos.hat:    same as pos.shirts, for the value label of the observed estiamte of d
+        #png.file:   if a name file is given, the graph is saved as a 'png' with that name, if not it is just displayed
+                     #png.file='example1.png' will save the resulting graph as a file named that
+      
+      
+      #Degrees of freedom for t-test
+         df=2*n-2
+    
+      #If p.obs is set, and not d.obs, compute t.obs and d.obs
+        if (!is.na(p.obs)) 
+            {
+            t.obs=qt(p=1-p.obs/2,df=df)
+            d.obs=(t.obs*2)/sqrt(2*n)
+            p.obs.clean=cleanp(p.obs)      #format it nicely
+          }#end of if
+       
+      #If d.obs is set, compute p.obs and t.obs 
+         if (!is.na(d.obs))
+            {
+            t.obs=d.obs*sqrt(2*n)/2
+            p.obs=2*(1-pt(t.obs,df=2*n-2)) #get p-value
+            p.obs.clean=cleanp(p.obs)      #format it nicely
+            }
+
+    #Get likelihoods
+        d=seq(-1,1,.01)           #compute the likelihood of the observed effect for possible values between -1 and 1
+                options(warn=-1)  #gives warnings from imprecision in non-central, ignore.
+        l.all=dt(t.obs,df=df,ncp=sqrt(n/2)*d) #likelihood for all hypotheses
+                options(warn=0)  #stop ignoring
+        l.0=dt(t.obs,df=df)        #likelihood of 0
+        r.all=l.all/l.0            #likelihood ratio for all hypotheses
+
+    #ylim:  if ylim not assigned, set it to observed rate, plus a buffer
+      if (is.na(ylim)) ylim=c(min(r.all)*.9,max(r.all,5)*1.25)
+      
+    #xlim:  If show.bayes=T, make space for it on the left
+      if (show.bayes==T) xlim=c(-2.4,1)
+      if (show.bayes==F) xlim=c(-1  ,1)
+      
+    #las: based on number of digits in the ratio
+      if (max(r.all)<1000)  las=1
+      if (max(r.all)>=1000) las=0
+        
+    #Plot
+        #Save it to .png file?
+            if (!is.na(png.file) & show.bayes==T) png(png.file, width=1800,height=800,res=150) 
+            if (!is.na(png.file) & show.bayes==F) png(png.file, width=1200,height=800,res=150) 
+
+        #margins
+            par(mar=c(6.1,6.1,4.1,2.1))
+        #start plotting
+            plot(d,r.all, pch=16,cex=.25,xlim=xlim,ylim=ylim, ylab="", las=las,  xaxt='n', xlab="")
+      
+        #Add Bayes results on the left of figure?
+           if (show.bayes==TRUE) {
+            #Calculations for the dots size
+                #Effects we will plot
+                    d.all=seq(-1,1,.01)
+                #Compute Bayes Weight to each value [note that for simplicity, the BF weights here are slightly different from those used in the BayesFactor()]
+                   weight.all=dnorm(d.all,sd=.7)
+                #Express them as 0-100  
+                   pw=(weight.all-min(weight.all))/(max(weight.all) -min(weight.all))
+                #Round it to 100 to use for coloring 
+                   cw=100-round(pw^2,2)*100  #cw: color weight
+                   cw=pmin(cw,90)
+            #Plot dots
+               points(d.all, r.all,pch=16,cex=.9*pw,col=paste0("gray",cw))  
+           
+            #Text with results
+                bf.obs=bf(n=n,d=d.obs)
+                text(-1.85,bf.obs,pos=3,offset=.1,paste0("Bayes Factor = ",round(bf.obs,1)),col='red4',font=2)
+                text(-1.85,bf.obs,pos=1,offset=.1,"(weighted average of all hypotheses)",col='red4',font=3,cex=.9)
+                
+              #Lines for key
+                #Vertical
+                  segments(lwd=1.5,x0=-1.1,x1=-1.1 ,y0=0,y1=max(r.all),col='red4')
+                #caps
+                  segments(lwd=1.5,x0=-1.05,x1=-1.1,y0=c(0,max(r.all)),y1=c(0,max(r.all)),col='red4')
+                #pointer
+                  arrows(lwd=1.5,x0=-1.1,x1=-1.2,y0=bf.obs, y1=bf.obs,length=.1,col='red4')
+                  
+                                              
+            }#<end of bayes>
+         
+    #Horizontal line at 1
+           segments(x0=-1,x1=1.2,y0=1,y1=1,col='gray66',lty=1)
+            
+    
+       #X-axis
+         #Ticks
+           ticks=c(-1,-.8,-.5,-.2,0,.2,.5,.8,1)
+           s.ticks=paste(ticks,c("\n","\n","\n","\n","\nNull","\nSmall","\nMedium","\nLarge","\n"))
+           axis(side=1,at=ticks,s.ticks,line=.22,tick=F,lty=3)
+           
+          #Tick at d.obs
+            axis(side=1,at=d.obs,"",lwd=2,col='red4')
+            text(d.obs,0,bquote(hat(d)*" = "*.(round(d.obs,2))),cex=.75,col='red4')
+            
+          #Label x-axis
+             mtext(side=1,at=-.25,adj=0,line=2.7,font=1,cex=1.1,"True effect size: d")
+             mtext(side=1,at=-.45, adj=0,line=4.1,font=2,cex=1.30,"Alternative Hypothesis")
+           
+      #y-axis
+            mtext(side=2,line=3.75,font=2,cex=1.55,"Likelihood Ratio")
+            mtext(side=2,line=2.55,font=3,cex=.9,"(# of times data are more likely under alternative)")
+         
+      #Always print ratio of 1 in the (2nd) y-axis, 
+           axis(side=4,at=1,1,col='gray70',las=1) 
+      #header
+            mtext(side=3,line=2.3,main1,font=2,cex=2)
+            mtext(side=3,line=0,main2,font=3,cex=1.5)      
+          
+      #DOTS - t-shirts
+            #Compute values
+              l.0=dt(t.obs,df)
+
+              d.shirts=c(.2,.5,.8)                          #ds for S,M,L
+              t.shirts=d.shirts/2*sqrt(2*n)                 #t-values
+              l.shirts=dt(t.obs,df,ncp=sqrt(n/2)*d.shirts)  #likelihood of those t-values
+              r.shirts=l.shirts/l.0                         #likelihood ratios with null
+        
+            #Plot Dots
+              points(d.shirts,r.shirts,pch=1,cex=2,lwd=2,col="blue2")
+           
+             #Print shirt values   
+                text(d.shirts,r.shirts, cleanr(r.shirts),pos=pos.shirts,cex=.85,font=2,col="blue2")
+
+         #RED DOT - observed value
+          l.obs=dt(t.obs,df,ncp=sqrt(n/2)*d.obs)
+          r.obs=l.obs/l.0
+          points(d.obs,r.obs,col='red4',pch=23,cex=1.25,lwd=2)
+          
+         #Print label
+          text(d.obs,r.obs,cleanr(r.obs),pos=pos.hat,col='red4',cex=.8)
+ 
+    #Legend
+         #How to describe dots? Depends on whether show.bayes is selected
+          if (show.bayes==T) leg.dot="Possible true effects, in .01 increments\n"
+          if (show.bayes==F) leg.dot="Possible true effects, in .01 increments"
+        
+         
+         leg=legend("topleft", inset=.011, pch=c(16,1,23),
+              col=c("black","blue2","red4"),box.col='white',
+              pt.cex=c(1,2,1.5), lwd=c(1,2,2), lty=NA,
+              legend=c(leg.dot,
+                       "{Small, Medium, Large} effects",
+                       "Observed effect                                    "))
+         
+            #add in italices the explanation of the weights, if usin Bayesian
+              leg.b=(leg$text$y[1]*9+leg$text$y[2])/10  #position it in between the dot and the blue circle
+              if (show.bayes==T) text(x=leg$text$x[1], y=leg.b,font=3,col='gray44',cex=.75,"(size of dots is proportional to weight given by Bayes Factor)", adj=c(0,1))
+        
+            
+    #save it if png.file specified        
+       if (!is.na(png.file)) dev.off()
+           
+              
+    #output from code
+      #  res=list(d.all=d, l.0, l.all, r.all,d. )
+
+  }
+  
+    
+    hyp.chart(d.obs=.5,n=100)  
+#Function that creates Hyp-Charts
+#Written by Uri Simonsohn, urisohn@gmail.com
+#Last update: 2019 09 06
+###########################################################
+
+  options(scipen=999) #avoid scientific notation
+  
+  rm(list = ls())      #clear everything
+  library(BayesFactor) #used to compute.. Bayes Factors
+  
+  #Function 1- Format p-values nicely 
+      cleanp=function(p)
+      {
+        p.clean=round(p, 4)        #Round it
+        p.clean=paste0("p = ",p.clean)
+        if (p <= .0001) p.clean= "p < .0001"
+        if (p > .9999) p.clean= "p > .9999"
+        return(p.clean)
+      }  
+      
+   #Function 2 - Format likelihood for presentation in chart
+      cleanr=function(r) {
+         #Round to 1 decimal if <100, 0 otherwise
+                v=ifelse(r<100,round(r,1),round(r))
+         #If biger than 1000 express in k
+                v=ifelse(r>1000,paste0(round(r/1000)," k"),v)
+         # If bigger than 100k just say that
+                v=ifelse(r>100000,">100 k",v)
+                v
+      }
+      
+      
+     #Function 3 - Simplify notation and output of how Bayes Factor is calculated 
+         bf=function(n,d) {
+              t=(d/2)*sqrt(2*n)
+              #cat("d=",d,"-->=",t,"\n")
+              exp(ttest.tstat(t,n1=n,n2=n)$bf)
+           }
+
+    #Function 4 - The HypChart function
+    hyp.chart=function(d.obs=NA,n,ylim=NA,p.obs=NA,
+      main1="Hyp-Chart: Null vs. Every Alternative",
+      main2= bquote("n="*.(n)*"  |  "*hat(d)*"="*.(round(d.obs,2))*"   |  "*.(p.obs.clean)),
+      show.bayes=FALSE,  #True to estimate Bayes Factor and disply weight given to each hypothesis
+      pos.shirts=c(3,3,3), #where to put the value labels for the shirts
+      pos.hat=1,              #where to put the value label for the hat
+      png.file=NA)   {
+      
+      #Syntax:
+        #d.obs: the observed effect size in a difference of means between sampe test, in Cohen d's
+        #p.obs: the p-value in the difference of means test
+        #Note: only assign one of the above two: p or d
+      
+        #n:     sample size
+        #ylim: in case you want to change the default size of the y-axis
+        #main1 & main2: headers
+        #show.bayes: TRUE or FALSE, with TRUE it compute and reports a bayes factor, and changes size of dots to proportional weight
+        #pos.shirts: positioning of value labels for the S,M,L effects, default is all three on top of figure 3, 1,2,3,4 are for bottom, left, top, right
+        #pos.hat:    same as pos.shirts, for the value label of the observed estiamte of d
+        #png.file:   if a name file is given, the graph is saved as a 'png' with that name, if not it is just displayed
+                     #png.file='example1.png' will save the resulting graph as a file named that
+      
+      
+      #Degrees of freedom for t-test
+         df=2*n-2
+    
+      #If p.obs is set, and not d.obs, compute t.obs and d.obs
+        if (!is.na(p.obs)) 
+            {
+            t.obs=qt(p=1-p.obs/2,df=df)
+            d.obs=(t.obs*2)/sqrt(2*n)
+            p.obs.clean=cleanp(p.obs)      #format it nicely
+          }#end of if
+       
+      #If d.obs is set, compute p.obs and t.obs 
+         if (!is.na(d.obs))
+            {
+            t.obs=d.obs*sqrt(2*n)/2
+            p.obs=2*(1-pt(t.obs,df=2*n-2)) #get p-value
+            p.obs.clean=cleanp(p.obs)      #format it nicely
+            }
+
+    #Get likelihoods
+        d=seq(-1,1,.01)           #compute the likelihood of the observed effect for possible values between -1 and 1
+                options(warn=-1)  #gives warnings from imprecision in non-central, ignore.
+        l.all=dt(t.obs,df=df,ncp=sqrt(n/2)*d) #likelihood for all hypotheses
+                options(warn=0)  #stop ignoring
+        l.0=dt(t.obs,df=df)        #likelihood of 0
+        r.all=l.all/l.0            #likelihood ratio for all hypotheses
+
+    #ylim:  if ylim not assigned, set it to observed rate, plus a buffer
+      if (is.na(ylim)) ylim=c(min(r.all)*.9,max(r.all,5)*1.25)
+      
+    #xlim:  If show.bayes=T, make space for it on the left
+      if (show.bayes==T) xlim=c(-2.4,1)
+      if (show.bayes==F) xlim=c(-1  ,1)
+      
+    #las: based on number of digits in the ratio
+      if (max(r.all)<1000)  las=1
+      if (max(r.all)>=1000) las=0
+        
+    #Plot
+        #Save it to .png file?
+            if (!is.na(png.file) & show.bayes==T) png(png.file, width=1800,height=800,res=150) 
+            if (!is.na(png.file) & show.bayes==F) png(png.file, width=1200,height=800,res=150) 
+
+        #margins
+            par(mar=c(6.1,6.1,4.1,2.1))
+        #start plotting
+            plot(d,r.all, pch=16,cex=.25,xlim=xlim,ylim=ylim, ylab="", las=las,  xaxt='n', xlab="")
+      
+        #Add Bayes results on the left of figure?
+           if (show.bayes==TRUE) {
+            #Calculations for the dots size
+                #Effects we will plot
+                    d.all=seq(-1,1,.01)
+                #Compute Bayes Weight to each value [note that for simplicity, the BF weights here are slightly different from those used in the BayesFactor()]
+                   weight.all=dnorm(d.all,sd=.7)
+                #Express them as 0-100  
+                   pw=(weight.all-min(weight.all))/(max(weight.all) -min(weight.all))
+                #Round it to 100 to use for coloring 
+                   cw=100-round(pw^2,2)*100  #cw: color weight
+                   cw=pmin(cw,90)
+            #Plot dots
+               points(d.all, r.all,pch=16,cex=.9*pw,col=paste0("gray",cw))  
+           
+            #Text with results
+                bf.obs=bf(n=n,d=d.obs)
+                text(-1.85,bf.obs,pos=3,offset=.1,paste0("Bayes Factor = ",round(bf.obs,1)),col='red4',font=2)
+                text(-1.85,bf.obs,pos=1,offset=.1,"(weighted average of all hypotheses)",col='red4',font=3,cex=.9)
+                
+              #Lines for key
+                #Vertical
+                  segments(lwd=1.5,x0=-1.1,x1=-1.1 ,y0=0,y1=max(r.all),col='red4')
+                #caps
+                  segments(lwd=1.5,x0=-1.05,x1=-1.1,y0=c(0,max(r.all)),y1=c(0,max(r.all)),col='red4')
+                #pointer
+                  arrows(lwd=1.5,x0=-1.1,x1=-1.2,y0=bf.obs, y1=bf.obs,length=.1,col='red4')
+                  
+                                              
+            }#<end of bayes>
+         
+    #Horizontal line at 1
+           segments(x0=-1,x1=1.2,y0=1,y1=1,col='gray66',lty=1)
+            
+    
+       #X-axis
+         #Ticks
+           ticks=c(-1,-.8,-.5,-.2,0,.2,.5,.8,1)
+           s.ticks=paste(ticks,c("\n","\n","\n","\n","\nNull","\nSmall","\nMedium","\nLarge","\n"))
+           axis(side=1,at=ticks,s.ticks,line=.22,tick=F,lty=3)
+           
+          #Tick at d.obs
+            axis(side=1,at=d.obs,"",lwd=2,col='red4')
+            text(d.obs,0,bquote(hat(d)*" = "*.(round(d.obs,2))),cex=.75,col='red4')
+            
+          #Label x-axis
+             mtext(side=1,at=-.25,adj=0,line=2.7,font=1,cex=1.1,"True effect size: d")
+             mtext(side=1,at=-.45, adj=0,line=4.1,font=2,cex=1.30,"Alternative Hypothesis")
+           
+      #y-axis
+            mtext(side=2,line=3.75,font=2,cex=1.55,"Likelihood Ratio")
+            mtext(side=2,line=2.55,font=3,cex=.9,"(# of times data are more likely under alternative)")
+         
+      #Always print ratio of 1 in the (2nd) y-axis, 
+           axis(side=4,at=1,1,col='gray70',las=1) 
+      #header
+            mtext(side=3,line=2.3,main1,font=2,cex=2)
+            mtext(side=3,line=0,main2,font=3,cex=1.5)      
+          
+      #DOTS - t-shirts
+            #Compute values
+              l.0=dt(t.obs,df)
+
+              d.shirts=c(.2,.5,.8)                          #ds for S,M,L
+              t.shirts=d.shirts/2*sqrt(2*n)                 #t-values
+              l.shirts=dt(t.obs,df,ncp=sqrt(n/2)*d.shirts)  #likelihood of those t-values
+              r.shirts=l.shirts/l.0                         #likelihood ratios with null
+        
+            #Plot Dots
+              points(d.shirts,r.shirts,pch=1,cex=2,lwd=2,col="blue2")
+           
+             #Print shirt values   
+                text(d.shirts,r.shirts, cleanr(r.shirts),pos=pos.shirts,cex=.85,font=2,col="blue2")
+
+         #RED DOT - observed value
+          l.obs=dt(t.obs,df,ncp=sqrt(n/2)*d.obs)
+          r.obs=l.obs/l.0
+          points(d.obs,r.obs,col='red4',pch=23,cex=1.25,lwd=2)
+          
+         #Print label
+          text(d.obs,r.obs,cleanr(r.obs),pos=pos.hat,col='red4',cex=.8)
+ 
+    #Legend
+         #How to describe dots? Depends on whether show.bayes is selected
+          if (show.bayes==T) leg.dot="Possible true effects, in .01 increments\n"
+          if (show.bayes==F) leg.dot="Possible true effects, in .01 increments"
+        
+         
+         leg=legend("topleft", inset=.011, pch=c(16,1,23),
+              col=c("black","blue2","red4"),box.col='white',
+              pt.cex=c(1,2,1.5), lwd=c(1,2,2), lty=NA,
+              legend=c(leg.dot,
+                       "{Small, Medium, Large} effects",
+                       "Observed effect                                    "))
+         
+            #add in italices the explanation of the weights, if usin Bayesian
+              leg.b=(leg$text$y[1]*9+leg$text$y[2])/10  #position it in between the dot and the blue circle
+              if (show.bayes==T) text(x=leg$text$x[1], y=leg.b,font=3,col='gray44',cex=.75,"(size of dots is proportional to weight given by Bayes Factor)", adj=c(0,1))
+        
+            
+    #save it if png.file specified        
+       if (!is.na(png.file)) dev.off()
+           
+              
+    #output from code
+      #  res=list(d.all=d, l.0, l.all, r.all,d. )
+
+  }
+  
+    
+    hyp.chart(d.obs=.5,n=100)

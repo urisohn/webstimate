@@ -1,0 +1,41 @@
+
+R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> 	#Welcome to R syntax
+> 		#Load the libraries and functions
+> 			.libPaths("/home/urisoh5/R/lib")  #Change to location of library
+> 			source("/home/urisoh5/public_html/webstimate.org/twolines/twolines.R")
+Loading required package: nlme
+This is mgcv 1.8-22. For overview type 'help("mgcv-package")'.
+Loading required package: zoo
+
+Attaching package: 'zoo'
+
+The following objects are masked from 'package:base':
+
+    as.Date, as.Date.numeric
+
+> 		#Set working directory, temp folder
+> 			setwd('/home/urisoh5/public_html/webstimate.org/twolines/temp/')
+> 		#Read it
+> 			#.libPaths("/home/urisoh5/R/lib")  #Change to location of library
+> 			library(rio)                      #To Accept multiple formats
+> 			library(readr)                      #To Accept multiple formats
+> 			a=import("/home/urisoh5/uploaded_data/webstimate.org/twolines/temp/")
+Error in get_ext(file) : 'file' has no extension
+Calls: import -> get_ext
+Execution halted

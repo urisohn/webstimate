@@ -1,0 +1,362 @@
+[02-Apr-2018 12:45:37 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 8
+[02-Apr-2018 12:45:37 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 9
+[02-Apr-2018 12:45:37 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 10
+[02-Apr-2018 12:45:37 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[02-Apr-2018 12:45:37 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[02-Apr-2018 12:45:37 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 15
+[02-Apr-2018 12:45:37 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 16
+[02-Apr-2018 12:45:37 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 17
+[02-Apr-2018 12:45:37 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 18
+[02-Apr-2018 12:45:37 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[02-Apr-2018 12:45:37 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[02-Apr-2018 12:45:37 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 81
+[02-Apr-2018 13:15:42 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 15
+[02-Apr-2018 13:15:42 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 16
+[02-Apr-2018 13:15:42 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 17
+[02-Apr-2018 13:15:42 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 18
+[02-Apr-2018 13:15:42 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[02-Apr-2018 13:15:42 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[02-Apr-2018 13:15:42 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 81
+[03-Apr-2018 21:31:26 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 15
+[03-Apr-2018 21:31:26 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 16
+[03-Apr-2018 21:31:26 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 17
+[03-Apr-2018 21:31:26 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 18
+[03-Apr-2018 21:31:26 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[03-Apr-2018 21:31:26 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[03-Apr-2018 21:31:26 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 81
+[07-Apr-2018 21:46:37 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 8
+[07-Apr-2018 21:46:37 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 9
+[07-Apr-2018 21:46:37 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 10
+[07-Apr-2018 21:46:37 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[07-Apr-2018 21:46:37 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[11-Apr-2018 01:35:49 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 15
+[11-Apr-2018 01:35:49 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 16
+[11-Apr-2018 01:35:49 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 17
+[11-Apr-2018 01:35:49 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 18
+[11-Apr-2018 01:35:49 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[11-Apr-2018 01:35:49 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[11-Apr-2018 01:35:49 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 81
+[16-Apr-2018 19:08:56 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[18-Apr-2018 00:47:14 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 15
+[18-Apr-2018 00:47:14 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 16
+[18-Apr-2018 00:47:14 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 17
+[18-Apr-2018 00:47:14 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 18
+[18-Apr-2018 00:47:14 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[18-Apr-2018 00:47:14 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[18-Apr-2018 00:47:14 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 81
+[18-Apr-2018 00:50:56 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 15
+[18-Apr-2018 00:50:56 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 16
+[18-Apr-2018 00:50:56 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 17
+[18-Apr-2018 00:50:56 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 18
+[18-Apr-2018 00:50:56 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[18-Apr-2018 00:50:56 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[18-Apr-2018 00:50:56 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 81
+[18-Apr-2018 15:28:18 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 8
+[18-Apr-2018 15:28:18 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 9
+[18-Apr-2018 15:28:18 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 10
+[18-Apr-2018 15:28:18 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[18-Apr-2018 15:28:18 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[19-Apr-2018 07:15:57 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 8
+[19-Apr-2018 07:15:57 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 9
+[19-Apr-2018 07:15:57 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 10
+[19-Apr-2018 07:15:57 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[19-Apr-2018 07:15:57 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[19-Apr-2018 16:17:13 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 15
+[19-Apr-2018 16:17:13 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 16
+[19-Apr-2018 16:17:13 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 17
+[19-Apr-2018 16:17:13 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 18
+[19-Apr-2018 16:17:13 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[19-Apr-2018 16:17:13 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[19-Apr-2018 16:17:13 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 81
+[19-Apr-2018 16:17:16 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 15
+[19-Apr-2018 16:17:16 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 16
+[19-Apr-2018 16:17:16 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 17
+[19-Apr-2018 16:17:16 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 18
+[19-Apr-2018 16:17:16 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[19-Apr-2018 16:17:16 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[19-Apr-2018 16:17:16 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 81
+[19-Apr-2018 16:17:41 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 15
+[19-Apr-2018 16:17:41 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 16
+[19-Apr-2018 16:17:41 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 17
+[19-Apr-2018 16:17:41 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 18
+[19-Apr-2018 16:17:41 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[19-Apr-2018 16:17:41 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[19-Apr-2018 16:17:41 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 81
+[19-Apr-2018 16:17:48 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 8
+[19-Apr-2018 16:17:48 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 9
+[19-Apr-2018 16:17:48 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 10
+[19-Apr-2018 16:17:48 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[19-Apr-2018 16:17:48 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[20-Apr-2018 03:29:23 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 15
+[20-Apr-2018 03:29:23 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 16
+[20-Apr-2018 03:29:23 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 17
+[20-Apr-2018 03:29:23 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 18
+[20-Apr-2018 03:29:23 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[20-Apr-2018 03:29:23 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[20-Apr-2018 03:29:23 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 81
+[20-Apr-2018 06:36:10 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/urisoh5/public_html/webstimate.org/twolines/index.php on line 3
+[20-Apr-2018 06:36:13 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/urisoh5/public_html/webstimate.org/twolines/index.php on line 3
+[20-Apr-2018 06:36:31 UTC] PHP Parse error:  syntax error, unexpected '<' in /home/urisoh5/public_html/webstimate.org/twolines/index.php on line 7
+[20-Apr-2018 06:36:33 UTC] PHP Parse error:  syntax error, unexpected '<' in /home/urisoh5/public_html/webstimate.org/twolines/index.php on line 7
+[20-Apr-2018 06:36:56 UTC] PHP Parse error:  syntax error, unexpected '<' in /home/urisoh5/public_html/webstimate.org/twolines/index.php on line 38
+[20-Apr-2018 06:37:08 UTC] PHP Parse error:  syntax error, unexpected '<' in /home/urisoh5/public_html/webstimate.org/twolines/index.php on line 34
+[20-Apr-2018 06:37:11 UTC] PHP Parse error:  syntax error, unexpected '<' in /home/urisoh5/public_html/webstimate.org/twolines/index.php on line 34
+[20-Apr-2018 06:37:26 UTC] PHP Warning:  Unterminated comment starting line 97 in /home/urisoh5/public_html/webstimate.org/twolines/index.php on line 97
+[20-Apr-2018 06:37:26 UTC] PHP Parse error:  syntax error, unexpected end of file in /home/urisoh5/public_html/webstimate.org/twolines/index.php on line 97
+[24-Apr-2018 04:25:25 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[24-Apr-2018 04:25:25 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[24-Apr-2018 04:25:25 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[24-Apr-2018 04:25:25 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[24-Apr-2018 04:25:25 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[24-Apr-2018 04:25:25 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[24-Apr-2018 04:25:25 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[26-Apr-2018 00:03:46 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[26-Apr-2018 00:03:46 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[26-Apr-2018 00:03:46 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[26-Apr-2018 00:03:46 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[26-Apr-2018 00:03:46 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[26-Apr-2018 00:03:46 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[26-Apr-2018 00:03:46 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[30-Apr-2018 11:24:27 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[30-Apr-2018 11:24:27 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[30-Apr-2018 11:24:27 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[30-Apr-2018 11:24:27 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[30-Apr-2018 11:24:27 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[30-Apr-2018 11:24:27 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[30-Apr-2018 11:24:27 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[30-Apr-2018 20:02:21 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[30-Apr-2018 20:02:21 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[30-Apr-2018 20:02:21 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[30-Apr-2018 20:02:21 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[30-Apr-2018 20:02:21 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[30-Apr-2018 20:02:21 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[01-May-2018 09:20:09 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[01-May-2018 10:25:59 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[01-May-2018 10:25:59 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[01-May-2018 10:25:59 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[01-May-2018 10:25:59 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[01-May-2018 10:25:59 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[01-May-2018 10:25:59 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[01-May-2018 10:25:59 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[01-May-2018 17:55:30 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[01-May-2018 17:55:30 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[01-May-2018 17:55:30 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[01-May-2018 17:55:30 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[01-May-2018 17:55:30 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[01-May-2018 17:55:30 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[01-May-2018 17:55:30 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[03-May-2018 16:38:05 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[03-May-2018 16:38:05 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[03-May-2018 16:38:05 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[03-May-2018 16:38:05 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[03-May-2018 16:38:05 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[03-May-2018 16:38:05 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[03-May-2018 16:38:05 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[03-May-2018 16:38:05 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[03-May-2018 16:38:05 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[03-May-2018 16:38:05 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[03-May-2018 16:38:05 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[03-May-2018 16:38:05 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[03-May-2018 16:40:47 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[03-May-2018 16:40:47 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[03-May-2018 16:40:47 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[03-May-2018 16:40:47 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[03-May-2018 16:40:47 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[03-May-2018 16:40:47 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[03-May-2018 16:40:47 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[07-May-2018 13:46:17 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[07-May-2018 13:46:17 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[07-May-2018 13:46:17 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[07-May-2018 13:46:17 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[07-May-2018 13:46:17 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[07-May-2018 13:46:17 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[07-May-2018 13:46:17 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[14-May-2018 09:17:34 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[14-May-2018 09:17:34 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[14-May-2018 09:17:34 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[14-May-2018 09:17:34 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[14-May-2018 09:17:34 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[22-May-2018 16:03:35 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[22-May-2018 16:03:35 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[22-May-2018 16:03:35 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[22-May-2018 16:03:35 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[22-May-2018 16:03:35 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[22-May-2018 16:03:35 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[22-May-2018 16:03:35 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[24-May-2018 04:11:58 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[24-May-2018 04:11:58 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[24-May-2018 04:11:58 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[24-May-2018 04:11:58 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[24-May-2018 04:11:58 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[24-May-2018 14:01:03 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[24-May-2018 14:36:17 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[24-May-2018 14:36:17 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[24-May-2018 14:36:17 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[24-May-2018 14:36:17 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[24-May-2018 14:36:17 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[24-May-2018 14:36:18 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[24-May-2018 14:36:18 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[24-May-2018 14:36:18 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[24-May-2018 14:36:18 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[24-May-2018 14:36:18 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[24-May-2018 14:36:18 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[24-May-2018 14:36:18 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[25-May-2018 06:19:06 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[25-May-2018 06:19:06 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[25-May-2018 06:19:06 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[25-May-2018 06:19:06 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[25-May-2018 06:19:06 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[25-May-2018 06:19:06 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[25-May-2018 06:19:06 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[27-May-2018 13:09:27 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[27-May-2018 13:09:27 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[27-May-2018 13:09:27 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[27-May-2018 13:09:27 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[27-May-2018 13:09:27 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[28-May-2018 12:10:39 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[28-May-2018 12:10:39 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[28-May-2018 12:10:39 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[28-May-2018 12:10:39 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[28-May-2018 12:10:39 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[28-May-2018 13:22:15 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[28-May-2018 13:22:15 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[28-May-2018 13:22:15 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[28-May-2018 13:22:15 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[28-May-2018 13:22:15 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[28-May-2018 14:25:33 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[28-May-2018 14:25:33 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[28-May-2018 14:25:33 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[28-May-2018 14:25:33 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[28-May-2018 14:25:33 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[28-May-2018 16:14:31 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[29-May-2018 02:29:29 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[29-May-2018 02:29:29 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[29-May-2018 02:29:29 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[29-May-2018 02:29:29 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[29-May-2018 02:29:29 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[29-May-2018 06:50:28 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[29-May-2018 06:50:28 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[29-May-2018 06:50:28 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[29-May-2018 06:50:28 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[29-May-2018 06:50:28 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[29-May-2018 12:03:59 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[29-May-2018 12:03:59 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[29-May-2018 12:03:59 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[29-May-2018 12:03:59 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[29-May-2018 12:03:59 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[29-May-2018 23:45:42 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[29-May-2018 23:45:42 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[29-May-2018 23:45:42 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[29-May-2018 23:45:42 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[29-May-2018 23:45:42 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[29-May-2018 23:45:42 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[29-May-2018 23:45:42 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[31-May-2018 19:08:26 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[31-May-2018 19:08:26 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[31-May-2018 19:08:26 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[31-May-2018 19:08:26 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[31-May-2018 19:08:26 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[31-May-2018 19:08:26 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[31-May-2018 19:08:26 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[03-Jun-2018 00:24:11 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[03-Jun-2018 00:24:11 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[03-Jun-2018 00:24:11 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[03-Jun-2018 00:24:11 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[03-Jun-2018 00:24:11 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[03-Jun-2018 00:24:11 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[03-Jun-2018 00:24:11 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[03-Jun-2018 07:15:49 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[03-Jun-2018 07:15:49 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[03-Jun-2018 07:15:49 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[03-Jun-2018 07:15:49 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[03-Jun-2018 07:15:49 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[03-Jun-2018 07:15:49 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[03-Jun-2018 07:15:49 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[05-Jun-2018 13:36:45 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[05-Jun-2018 13:36:45 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[05-Jun-2018 13:36:45 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[05-Jun-2018 13:36:45 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[05-Jun-2018 13:36:45 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[05-Jun-2018 13:37:23 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[05-Jun-2018 13:37:23 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[05-Jun-2018 13:37:23 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[05-Jun-2018 13:37:23 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[05-Jun-2018 13:37:23 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[05-Jun-2018 13:37:23 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[05-Jun-2018 13:37:23 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[11-Jun-2018 15:23:29 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[11-Jun-2018 15:23:29 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[11-Jun-2018 15:23:29 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[11-Jun-2018 15:23:29 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[11-Jun-2018 15:23:29 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[15-Jun-2018 03:53:39 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[15-Jun-2018 03:53:39 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[15-Jun-2018 03:53:39 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[15-Jun-2018 03:53:39 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[15-Jun-2018 03:53:39 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[15-Jun-2018 06:10:17 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[15-Jun-2018 06:10:17 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[15-Jun-2018 06:10:17 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[15-Jun-2018 06:10:17 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[15-Jun-2018 06:10:17 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[18-Jun-2018 10:34:53 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 19
+[18-Jun-2018 10:34:53 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 20
+[18-Jun-2018 10:34:53 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 21
+[18-Jun-2018 10:34:53 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 22
+[18-Jun-2018 10:34:53 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 23
+[18-Jun-2018 10:34:53 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 24
+[18-Jun-2018 10:34:53 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines/run.php on line 85
+[18-Jun-2018 11:13:44 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[18-Jun-2018 11:13:44 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[18-Jun-2018 11:13:44 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[18-Jun-2018 11:13:44 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[18-Jun-2018 11:13:44 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[18-Jun-2018 11:13:47 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[18-Jun-2018 11:13:47 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[18-Jun-2018 11:13:47 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[18-Jun-2018 11:13:47 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[18-Jun-2018 11:13:47 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[21-Jun-2018 17:50:14 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[21-Jun-2018 17:50:14 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[21-Jun-2018 17:50:14 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[21-Jun-2018 17:50:14 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[21-Jun-2018 17:50:14 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[22-Jun-2018 05:58:33 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[22-Jun-2018 05:58:33 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[22-Jun-2018 05:58:33 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[22-Jun-2018 05:58:33 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[22-Jun-2018 05:58:33 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[25-Jun-2018 11:48:37 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[25-Jun-2018 11:48:37 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[25-Jun-2018 11:48:37 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[25-Jun-2018 11:48:37 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[25-Jun-2018 11:48:37 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[25-Jun-2018 11:48:50 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[25-Jun-2018 11:48:50 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[25-Jun-2018 11:48:50 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[25-Jun-2018 11:48:50 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[25-Jun-2018 11:48:50 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[25-Jun-2018 11:49:07 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 11
+[25-Jun-2018 11:49:07 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 12
+[25-Jun-2018 11:49:07 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 13
+[25-Jun-2018 11:49:07 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 14
+[25-Jun-2018 11:49:07 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines/preview.php on line 15
+[26-Jun-2018 13:30:08 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines2/run.php on line 19
+[26-Jun-2018 13:30:08 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines2/run.php on line 20
+[26-Jun-2018 13:30:08 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines2/run.php on line 21
+[26-Jun-2018 13:30:08 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines2/run.php on line 22
+[26-Jun-2018 13:30:08 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines2/run.php on line 23
+[26-Jun-2018 13:30:08 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines2/run.php on line 24
+[26-Jun-2018 13:30:08 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines2/run.php on line 85
+[26-Jun-2018 13:30:08 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines2/preview.php on line 11
+[26-Jun-2018 13:30:08 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines2/preview.php on line 12
+[26-Jun-2018 13:30:08 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines2/preview.php on line 13
+[26-Jun-2018 13:30:08 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines2/preview.php on line 14
+[26-Jun-2018 13:30:08 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines2/preview.php on line 15
+[26-Jun-2018 13:30:49 UTC] PHP Notice:  Undefined index: file in /home/urisoh5/public_html/webstimate.org/twolines2/run.php on line 19
+[26-Jun-2018 13:30:49 UTC] PHP Notice:  Undefined index: dir in /home/urisoh5/public_html/webstimate.org/twolines2/run.php on line 20
+[26-Jun-2018 13:30:49 UTC] PHP Notice:  Undefined index: dir_data in /home/urisoh5/public_html/webstimate.org/twolines2/run.php on line 21
+[26-Jun-2018 13:30:49 UTC] PHP Notice:  Undefined index: time in /home/urisoh5/public_html/webstimate.org/twolines2/run.php on line 22
+[26-Jun-2018 13:30:49 UTC] PHP Notice:  Undefined index: extension in /home/urisoh5/public_html/webstimate.org/twolines2/run.php on line 23
+[26-Jun-2018 13:30:49 UTC] PHP Notice:  Undefined index: f in /home/urisoh5/public_html/webstimate.org/twolines2/run.php on line 24
+[26-Jun-2018 13:30:49 UTC] PHP Warning:  chdir(): No such file or directory (errno 2) in /home/urisoh5/public_html/webstimate.org/twolines2/run.php on line 85
