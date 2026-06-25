@@ -1,7 +1,7 @@
 
-R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
-Copyright (C) 2019 The R Foundation for Statistical Computing
-Platform: x86_64-redhat-linux-gnu (64-bit)
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -21,7 +21,7 @@ Type 'q()' to quit R.
 > 			library(readr,lib.loc="/usr/lib64/R/library" ) #library to convert and accept multiple format
 > 		    source("/home/urisoh5/public_html/webstimate.org/twolines/twolines.R")
 Loading required package: nlme
-This is mgcv 1.8-31. For overview type 'help("mgcv-package")'.
+This is mgcv 1.9-4. For overview type '?mgcv'.
 Loading required package: zoo
 
 Attaching package: 'zoo'
@@ -35,6 +35,5 @@ The following objects are masked from 'package:base':
 > 			setwd('/home/urisoh5/public_html/webstimate.org/twolines/temp/')
 > 		#Read it
 > 			data.imported=import("/home/urisoh5/uploaded_data/webstimate.org/twolines/temp/")
-Error in get_ext(file) : 'file' has no extension
-Calls: import -> get_ext
+Error: 'file' has no extension
 Execution halted

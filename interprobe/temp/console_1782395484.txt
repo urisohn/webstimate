@@ -1,0 +1,5 @@
+Probing the interaction of 'y' * 'x2'
+p-value for the interaction:
+  linear model: unavailable
+  GAM: F(2.52, 2.95) = 2.24, p = 0.082
+

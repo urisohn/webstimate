@@ -1,0 +1,15 @@
+Probing the interaction of 'x' * 'z'
+p-value for the interaction:
+  linear model: t(996) = 1.09, p = 0.276 (robust errors: HC3)
+  GAM: F(4.46, 5.42) = 10.51, p < .001
+
+Johnson-Neyman Regions of Significance
+1) The contrast for 'x' of 1 - 0 is positive in the range of 'z': [-2.91 to -1.37]
+2) The contrast for 'x' of 1 - 0 is positive in the range of 'z': [0.98 to 3.2]
+
+
+Notes:
+1) Regions of significance reported by interprobe() never include values outside
+range of observed data.
+2) These regions are precise to 1/100 of the range of x-values. For 
+greater precision (and slower estimation) set 'probe.bins' to a value greater than '100'.

@@ -1,0 +1,18 @@
+	.libPaths("/usr/local/R/library")
+	library(rio)
+	library(statuser)
+	writeLines(as.character(packageVersion("statuser")), "/home/urisoh5/public_html/webstimate.org/interprobe/temp/statuser_1782396768.txt")
+
+	setwd("/home/urisoh5/public_html/webstimate.org/interprobe/temp/")
+	data.imported=import("/home/urisoh5/uploaded_data/webstimate.org/interprobe/temp/1782396768.csv")
+	if (!exists("data.imported")) stop("Sorry, R was unable to read the file 1782396768.csv")
+
+	sink("/home/urisoh5/public_html/webstimate.org/interprobe/temp/console_1782396768.txt")
+	interprobe(
+		x="x",
+		z="z",
+		y="y",
+		data=data.imported,
+		save.as="/home/urisoh5/public_html/webstimate.org/interprobe/temp/1782396768.png"
+	)
+	sink()

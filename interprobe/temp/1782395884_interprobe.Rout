@@ -1,0 +1,39 @@
+
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> 	.libPaths("/usr/local/R/library")
+> 	library(rio)
+> 	library(statuser)
+> 
+> 	setwd("/home/urisoh5/public_html/webstimate.org/interprobe/temp/")
+> 	data.imported=import("/home/urisoh5/uploaded_data/webstimate.org/interprobe/temp/1782395884.csv")
+> 	if (!exists("data.imported")) stop("Sorry, R was unable to read the file 1782395884.csv")
+> 
+> 	sink("/home/urisoh5/public_html/webstimate.org/interprobe/temp/console_1782395884.txt")
+> 	interprobe(
++ 		x="x",
++ 		z="z",
++ 		y="y",
++ 		data=data.imported,
++ 		save.as="/home/urisoh5/public_html/webstimate.org/interprobe/temp/1782395884.png"
++ 	)
+The figures have been saved to '/home/urisoh5/public_html/webstimate.org/interprobe/temp/1782395884.png'
+> 	sink()
+> 
+> proc.time()
+   user  system elapsed 
+  7.511   0.240   6.140 
