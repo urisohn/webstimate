@@ -1,0 +1,2 @@
+	source("/home/urisoh5/public_html/webstimate.org/interprobe/vars.r")
+	vars("1782395884","csv")

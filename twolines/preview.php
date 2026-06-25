@@ -1,10 +1,14 @@
-<?
-		session_start();
+<?php
+session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 	#Get version
 		$version=file_get_contents("version.txt");
 
 // Notificar todos los errores de PHP (ver el registro de cambios)
 error_reporting(E_ALL);
+
 ?><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"><?
 
 #Set file name and folder

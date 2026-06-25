@@ -1,7 +1,7 @@
 
-R version 3.6.0 (2019-04-26) -- "Planting of a Tree"
-Copyright (C) 2019 The R Foundation for Statistical Computing
-Platform: x86_64-redhat-linux-gnu (64-bit)
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-redhat-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -15,11 +15,9 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> 	#Welcome to R syntax
-> 		source("/home/urisoh5/public_html/webstimate.org/twolines/preview.r")
-> 		preview("1775551282","sav")
-> 	#end R Syntax;
+> 	source("/home/urisoh5/public_html/webstimate.org/interprobe/vars.r")
+> 	vars("1782395884","csv")
 > 
 > proc.time()
    user  system elapsed 
-  0.361   0.050   0.402 
+  0.271   0.029   0.278 
