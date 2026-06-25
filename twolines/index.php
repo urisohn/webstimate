@@ -1,133 +1,154 @@
-<?
-	#Get version
-		$version=file_get_contents("version.txt");
-?>
-
-<style>
-.mycontent-left {
-  border-right: 1px solid dodgerblue;
-}
-
-
-@media ( min-width: 768px ) {
-    .grid-divider {
-        position: relative;
-        padding: 0;
-    }
-    .grid-divider>[class*='col-'] {
-        position: static;
-    }
-    .grid-divider>[class*='col-']:nth-child(n+2):before {
-        content: "";
-        border-left: 1px solid #DDD;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-    }
-    .col-padding {
-        padding: 0 15px;
-    }
-}
-</style>
-
-	
-
-
 <head>
-  <title>Two lines v<?echo $version;?></title>
+  <title>Two-lines test</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
- <head>
+  <style>
+    body { color: #333; }
+    .jumbotron { padding-top: 28px; padding-bottom: 28px; margin-bottom: 0; background: #f7f9fc; border-bottom: 1px solid #e3e8ef; }
+    .jumbotron h1 { font-size: 32px; line-height: 1.35; font-weight: 600; letter-spacing: -0.3px; }
+    .landing-main { max-width: 720px; margin: 0 auto; padding: 32px 15px 24px; font-size: 16px; line-height: 1.6; }
+    .landing-main p { margin-bottom: 14px; }
+    .landing-main ol { padding-left: 22px; margin-bottom: 18px; }
+    .landing-main ol li { margin-bottom: 6px; }
+    .landing-main .refs { font-size: 15px; color: #444; }
+    .example-figure { text-align: center; margin: 20px 0 8px; }
+    .r-links { margin-top: 18px; }
+    .r-links .btn { margin: 4px 6px 4px 0; }
+    .upload-section { max-width: 520px; margin: 0 auto; text-align: center; padding: 8px 0 24px; }
+    .upload-section h3 { margin-top: 0; margin-bottom: 18px; font-size: 20px; font-weight: 600; }
+    .upload-panel { background: #fafbfc; border: 1px solid #e3e8ef; border-radius: 6px; padding: 24px 20px; transition: border-color 0.15s, background 0.15s; }
+    .upload-panel.drag-over { border-color: #5cb85c; background: #f3faf4; }
+    .drop-prompt { padding: 8px 0 4px; color: #666; }
+    .drop-prompt p { margin-bottom: 6px; }
+    .drop-or { font-size: 13px; color: #999; }
+    .file-name { font-size: 14px; color: #333; margin: 10px 0 0; font-weight: 600; min-height: 20px; }
+    .upload-panel input[type="file"] { display: none; }
+    .upload-panel .btn { min-width: 120px; }
+    .upload-hint { margin-top: 12px; font-size: 14px; color: #666; }
+    .privacy-block { max-width: 640px; margin: 8px auto 0; }
+    .page-footer { margin-top: 24px; padding: 16px 0 32px; font-size: 12px; color: #999; text-align: center; }
+  </style>
+</head>
 <body>
 
 <div class="jumbotron text-center">
   <h1>Two-lines test</h1>
-   <h2>(version <?echo $version;?> - beta testing)</h2> 
-</div>
-  
-  
-<div class="container">
-<?# <center><div class="alert alert-danger"><font size='8'>CURRENTLY (2017 11 28) UPDATING, PLEASE DO NOT USE</FONT><br></div></center>?>
-<font size='3'><font color='gray'>Last updated: 2018 11 23 (see <a href='changes.php'>how the app has changed</a> over time</font>)</font><BR><BR>
- 
-		
-<font size='5'>
-This app runs the u-shape test introduced by Simonsohn (2017 <a href="http://urisohn.com/sohn_files/wp/wordpress/wp-content/uploads/2019/01/two-lines-u-shape-published.pdf">.pdf</a>).<BR>
-
-<font size='4'>
-		In particular, it estimates an interrupted regression, that is, a regression with two separate slopes, for the 
-		predictor hypothesized to have a u-shaped effect. The breakpoint is set using the "Robin Hood" algorithm, 
-		seeking to obtain higher power to detect a u-shape if it is present. If the resulting two slopes have opposite sign, 
-		and are individually statistically significant, the test rejects the null hypothesis that
-		there is no u-shaped (nor inverted u-shaped) effect.<BR>
-		<BR><BR>
-
-The output is a chart like this one:<BR></font></font>
-
-<a href='twolines.png' target="_blank"><img src="twolines.png" width='400'></img></a><HR>
-
-<div class="row bg-secondary" background-color: yellow;>
-	<div class="col-sm-5 mycontent-left "	>
-		<BR>
-		<font size='4'>If you know R you may want to: </font>
-			<BR>
-			<a href='example.r'><button class='btn-primary'>See example</button></a></font>
-			<a href='http://webstimate.org/twolines/twolines.R'><button class='btn-success'>Download the R Code</button></a></font>
-			</font><BR><BR><BR>
-		
-		
-	</div>
-	<div class='col-sm-1'>
-	</div>
-	<div class='col-sm-6 '>
-		
-	
-	
-	<form action="upload.php" method="post" enctype="multipart/form-data">
-    <font size='4' color='black'><BR>If you don't know R, or you're feeling lazy. Use this web app<BR> 
-	
-	<font size='4'><input type="file" name="fileToUpload" id="fileToUpload" >
-	<input type="submit" value="Upload" name="Submit" class='btn btn-success'><BR>
-	<font size='3'>If you don't have a file but want to check things out, download this <a href='example.csv'>datafile</a>  and then upload it.</a>
-	<div class="alert alert-danger" >
-  <h4 class="alert-heading">Data privacy information.</h4><font size='2'>
-  Uploaded data is deleted within 72 hours. The files are saved, unencrypted, in a public folder but 
-  given a temporary name which means it is quite difficult for a third party to find them, but not impossible.
-  For confidential data I recommend downloading the R Code and running locally without uploading the data to the server.</font></div>
-	<BR><BR>
-	<BR><BR>
-	
-	</form>
-
-
-
-	
-	</div>
 </div>
 
+<div class="landing-main">
+  <p>This app runs the u-shape test introduced by Simonsohn (2017 <a href="http://urisohn.com/sohn_files/wp/wordpress/wp-content/uploads/2019/01/two-lines-u-shape-published.pdf">.pdf</a>).</p>
 
+  <p>It estimates an interrupted regression&mdash;two separate slopes&mdash;for the predictor hypothesized to have a u-shaped effect. The breakpoint is set using the &ldquo;Robin Hood&rdquo; algorithm, seeking higher power to detect a u-shape if it is present. If the resulting two slopes have opposite sign and are individually statistically significant, the test rejects the null that there is no u-shaped (nor inverted u-shaped) effect.</p>
 
+  <p><strong>To proceed:</strong></p>
+  <ol>
+    <li>Upload the data</li>
+    <li>Preview the file and enter the regression model to test</li>
+    <li>Get publication-ready figures and results</li>
+  </ol>
 
+  <p class="example-figure"><strong>Example output:</strong><br>
+  <a href="twolines.png" target="_blank"><img src="twolines.png" width="400" alt="Example two-lines chart"></a></p>
 
+  <div class="refs r-links">
+    <p><strong>If you know R:</strong></p>
+    <a href="example.r" class="btn btn-primary">See example</a>
+    <a href="http://webstimate.org/twolines/twolines.R" class="btn btn-success">Download the R code</a>
+    <p style="margin-top: 14px; font-size: 14px; color: #666;">See <a href="changes.php">how the app has changed</a> over time.</p>
+  </div>
+</div>
+
+<hr>
+
+<div class="upload-section">
+  <h3>Upload your data</h3>
+  <div class="upload-panel" id="uploadDropzone">
+    <form action="upload.php" method="post" enctype="multipart/form-data" id="uploadForm">
+      <div class="drop-prompt">
+        <p>Drag and drop your file here</p>
+        <p class="drop-or">or</p>
+        <label for="fileToUpload" class="btn btn-default btn-sm">Choose file</label>
+        <input type="file" name="fileToUpload" id="fileToUpload">
+        <p class="file-name" id="fileName"></p>
+      </div>
+      <br>
+      <input type="submit" value="Upload" name="Submit" class="btn btn-success btn-lg">
+    </form>
+    <p class="upload-hint">No file handy? Download this <a href="example.csv">example datafile</a> and upload it.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var dropzone = document.getElementById("uploadDropzone");
+  var form = document.getElementById("uploadForm");
+  var fileInput = document.getElementById("fileToUpload");
+  var fileName = document.getElementById("fileName");
+
+  function setFile(file, autoSubmit) {
+    if (!file) return;
+    var dt = new DataTransfer();
+    dt.items.add(file);
+    fileInput.files = dt.files;
+    fileName.textContent = file.name;
+    if (autoSubmit) form.submit();
+  }
+
+  fileInput.addEventListener("change", function () {
+    if (fileInput.files.length) {
+      fileName.textContent = fileInput.files[0].name;
+    }
+  });
+
+  ["dragenter", "dragover"].forEach(function (eventName) {
+    dropzone.addEventListener(eventName, function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      dropzone.classList.add("drag-over");
+    });
+  });
+
+  ["dragleave", "drop"].forEach(function (eventName) {
+    dropzone.addEventListener(eventName, function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      dropzone.classList.remove("drag-over");
+    });
+  });
+
+  dropzone.addEventListener("drop", function (e) {
+    var files = e.dataTransfer.files;
+    if (files.length) setFile(files[0], true);
+  });
+})();
+</script>
+
+<div class="privacy-block">
+  <div class="alert alert-danger text-center">
+    <h4 class="alert-heading">Data privacy information</h4>
+    <p style="margin-bottom: 0; font-size: 13px;">
+    Uploaded data is deleted within 72 hours. Files are saved unencrypted in a public
+    folder but given a temporary name, so they are hard to find but not impossible to locate.
+    For confidential data, download the R code and run locally instead of uploading here.
+    </p>
+  </div>
+</div>
 
 <?
+  $dir1 = "/home/urisoh5/uploaded_data/webstimate.org/twolines/temp/";
+  foreach (glob($dir1."*") as $file) {
+    if (filemtime($file) < time() - 24*3*60) {
+      unlink($file);
+    }
+  }
 
-	#DELETE FILES OLDER THAN 3 days
-		$dir1 = "/home/urisoh5/uploaded_data/webstimate.org/twolines/temp/"; /** define the directory **/
-		foreach (glob($dir1."*") as $file) 			 {   /*** cycle through all files in the directory ***/
-			if (filemtime($file) < time() - 24*3*60) { /*** if file is OLDER THAN A WEEK delete it ***/
-			unlink($file);
-			} #End if()
-			} #End for each() loop
-		
-		$dir2 = "./temp/"; /** define the directory **/
-		foreach (glob($dir2."*") as $file) 			 {   /*** cycle through all files in the directory ***/
-			if (filemtime($file) < time() - 60*3*24) { /*** if file is OLDER THAN A WEEK delete it ***/
-			unlink($file);
-			} #End if()
-			} #End for each() loop
-		
-
+  $dir2 = "./temp/";
+  foreach (glob($dir2."*") as $file) {
+    if (filemtime($file) < time() - 60*3*24) {
+      unlink($file);
+    }
+  }
 ?>
-<hr><font size='1' color='gray'><center>Thanks for using the two-lines test</center>
+
+<div class="page-footer">Thanks for using the two-lines test</div>
 </body>
 </html>
