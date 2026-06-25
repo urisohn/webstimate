@@ -96,7 +96,6 @@ $rcode = <<<RCODE
 	if (!exists("data.imported")) stop("Sorry, R was unable to read the file $file")
 
 	sink("$console_file")
-	sink(type="message", split=TRUE)
 	interprobe(
 		x="$x_r",
 		z="$z_r",
@@ -105,7 +104,6 @@ $rcode = <<<RCODE
 		save.as="$png_path"
 	)
 	sink()
-	sink(type="message")
 RCODE;
 
 file_put_contents($batch_script, $rcode);
