@@ -46,8 +46,7 @@
     Montealegre &amp; Simonsohn (2026) &ldquo;Johnson-Neyman 2.0&rdquo;, under review, <em>Journal of Consumer Research</em></p>
 
     <p><strong>For background see</strong><br>
-    Simonsohn (2024) &ldquo;Interacting with Curves&rdquo;, <em>Advances in Methods and Practices in Psychological Science</em>.
-    <a href="https://doi.org/10.1177/25152459231207787">https://doi.org/10.1177/25152459231207787</a></p>
+    Simonsohn, U. (2024). Interacting with curves: How to validly test and probe interactions in the real (nonlinear) world. <em>Advances in Methods and Practices in Psychological Science</em>, <em>7</em>(1), 1&ndash;22. <a href="https://doi.org/10.1177/25152459231207787">https://doi.org/10.1177/25152459231207787</a></p>
   </div>
 </div>
 
