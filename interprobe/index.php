@@ -144,6 +144,6 @@
   }
 ?>
 
-<div class="page-footer">Thanks for using Interprobe</div>
+<div class="page-footer">Last updated: <? $date = "2025 06 25"; echo $date; ?></div>
 </body>
 </html>
