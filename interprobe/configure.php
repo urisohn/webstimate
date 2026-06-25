@@ -2,8 +2,11 @@
 session_start();
 error_reporting(E_ALL);
 ?>
+<head>
+  <title>Johnson-Neyman 2.0: Online App for Nonlinear Probing of Interactions</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <style>
+.jumbotron h1 { font-size: 26px; line-height: 1.35; font-weight: 600; }
 .var-table { width: auto; }
 .var-table th, .var-table td { white-space: nowrap; padding: 6px 12px; text-align: center; }
 .var-table label { display: block; margin: 0; cursor: pointer; font-weight: normal; }
@@ -52,7 +55,7 @@ $_SESSION['variables'] = $variables;
 ?>
 
 <div class="jumbotron text-center">
-	<h1>Interprobe</h1>
+	<h1>Johnson-Neyman 2.0: Online App for Nonlinear Probing of Interactions</h1>
 </div>
 
 <div class="container">

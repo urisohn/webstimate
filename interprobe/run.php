@@ -4,8 +4,9 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 ?>
 <head>
-  <title>Interprobe - Results</title>
+  <title>Johnson-Neyman 2.0: Online App for Nonlinear Probing of Interactions - Results</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <style>.jumbotron h1 { font-size: 26px; line-height: 1.35; font-weight: 600; }</style>
 </head>
 <body>
 <?
@@ -27,7 +28,7 @@ function die_alert($msg) {
 
 function die_run_error($msg) {
 	die(
-		"<div class='jumbotron text-center'><h1>Interprobe</h1></div>".
+		"<div class='jumbotron text-center'><h1>Johnson-Neyman 2.0: Online App for Nonlinear Probing of Interactions</h1></div>".
 		"<div class='container'>".
 		"<div class='alert alert-danger'>$msg</div>".
 		"<BR><a href='configure.php' class='btn btn-default'>Go back</a>".
@@ -115,7 +116,7 @@ if (file_exists($statuser_version_file)) {
 ?>
 
 <div class="jumbotron text-center">
-  <h1>Interprobe</h1>
+  <h1>Johnson-Neyman 2.0: Online App for Nonlinear Probing of Interactions</h1>
 </div>
 
 <div class="container">
