@@ -13,17 +13,16 @@
     .example-figure { text-align: center; margin: 20px 0 8px; }
     .r-links { margin-top: 18px; }
     .r-links .btn { margin: 4px 6px 4px 0; }
-    .upload-section { max-width: 520px; margin: 0 auto; text-align: center; padding: 8px 0 24px; }
-    .upload-section h3 { margin-top: 0; margin-bottom: 18px; font-size: 20px; font-weight: 600; }
-    .upload-panel { background: #fafbfc; border: 1px solid #e3e8ef; border-radius: 6px; padding: 24px 20px; transition: border-color 0.15s, background 0.15s; }
-    .upload-panel.drag-over { border-color: #5cb85c; background: #f3faf4; }
-    .drop-prompt { padding: 8px 0 4px; color: #666; }
-    .drop-prompt p { margin-bottom: 6px; }
-    .drop-or { font-size: 13px; color: #999; }
-    .file-name { font-size: 14px; color: #333; margin: 10px 0 0; font-weight: 600; min-height: 20px; }
-    .upload-panel input[type="file"] { display: none; }
-    .upload-panel .btn { min-width: 120px; }
-    .upload-hint { margin-top: 12px; font-size: 14px; color: #666; }
+    .upload-section { max-width: 400px; margin: 0 auto; text-align: center; padding: 4px 0 12px; }
+    .upload-section h3 { margin-top: 0; margin-bottom: 10px; font-size: 18px; font-weight: 600; }
+    .upload-panel { background: #fafbfc; border: 3px dashed #337ab7; border-radius: 6px; padding: 14px 16px; transition: border-color 0.15s, background 0.15s; cursor: pointer; }
+    .upload-panel.drag-over { border-color: #23527c; background: #eef5fc; }
+    .upload-icon { font-size: 34px; color: #337ab7; display: block; margin-bottom: 6px; line-height: 1; }
+    .drop-prompt { padding: 0; color: #666; }
+    .drop-prompt p { margin-bottom: 4px; font-size: 14px; }
+    .choose-file-link { color: #337ab7; cursor: pointer; font-size: 14px; font-weight: normal; margin-bottom: 0; text-decoration: underline; }
+    .file-name { font-size: 13px; color: #333; margin: 6px 0 0; font-weight: 600; min-height: 16px; }
+    .upload-hint { margin-top: 10px; font-size: 13px; color: #666; }
     .privacy-block { max-width: 640px; margin: 8px auto 0; }
     .page-footer { margin-top: 24px; padding: 16px 0 32px; font-size: 12px; color: #999; text-align: center; }
   </style>
@@ -61,20 +60,18 @@
 
 <div class="upload-section">
   <h3>Upload your data</h3>
-  <div class="upload-panel" id="uploadDropzone">
-    <form action="upload.php" method="post" enctype="multipart/form-data" id="uploadForm">
+  <form action="upload.php" method="post" enctype="multipart/form-data" id="uploadForm">
+    <div class="upload-panel" id="uploadDropzone">
+      <span class="glyphicon glyphicon-cloud-upload upload-icon" aria-hidden="true"></span>
       <div class="drop-prompt">
         <p>Drag and drop your file here</p>
-        <p class="drop-or">or</p>
-        <label for="fileToUpload" class="btn btn-default btn-sm">Choose file</label>
-        <input type="file" name="fileToUpload" id="fileToUpload">
+        <label for="fileToUpload" class="choose-file-link">Choose file</label>
+        <input type="file" name="fileToUpload" id="fileToUpload" style="display:none">
         <p class="file-name" id="fileName"></p>
       </div>
-      <br>
-      <input type="submit" value="Upload" name="Submit" class="btn btn-success btn-lg">
-    </form>
-    <p class="upload-hint">No file handy? Download this <a href="example.csv">example datafile</a> and upload it.</p>
-  </div>
+    </div>
+  </form>
+  <p class="upload-hint">No file handy? Download this <a href="example.csv">example datafile</a> and upload it.</p>
 </div>
 
 <script>
@@ -84,19 +81,22 @@
   var fileInput = document.getElementById("fileToUpload");
   var fileName = document.getElementById("fileName");
 
-  function setFile(file, autoSubmit) {
+  function setFile(file) {
     if (!file) return;
     var dt = new DataTransfer();
     dt.items.add(file);
     fileInput.files = dt.files;
-    fileName.textContent = file.name;
-    if (autoSubmit) form.submit();
+    fileName.textContent = "Uploading " + file.name + "\u2026";
+    form.submit();
   }
 
   fileInput.addEventListener("change", function () {
-    if (fileInput.files.length) {
-      fileName.textContent = fileInput.files[0].name;
-    }
+    if (fileInput.files.length) setFile(fileInput.files[0]);
+  });
+
+  dropzone.addEventListener("click", function (e) {
+    if (e.target.classList.contains("choose-file-link")) return;
+    fileInput.click();
   });
 
   ["dragenter", "dragover"].forEach(function (eventName) {
@@ -117,7 +117,7 @@
 
   dropzone.addEventListener("drop", function (e) {
     var files = e.dataTransfer.files;
-    if (files.length) setFile(files[0], true);
+    if (files.length) setFile(files[0]);
   });
 })();
 </script>
