@@ -4,6 +4,7 @@ require_once __DIR__ . '/../includes/turnstile.php';
 verify_turnstile_or_die('index.php');
 require_once __DIR__ . '/../includes/job_traffic.php';
 job_traffic_check_or_die('index.php');
+require_once __DIR__ . '/../includes/upload_limits.php';
 
 #1) File preliminaries
 	#1.1 Get info
@@ -17,7 +18,7 @@ job_traffic_check_or_die('index.php');
 		#Check right type of file
 			#if ($file_type != "csv" && $file_type != "R" && $file_type != "dta") die ("Sorry, that file type is not allowed.<BR>Only .txt, .R or .dta");
 		#Check if too heavy
-#			if ($file_size>500000) die ("too heavy, sorry.");
+			if (upload_too_large($file_size)) die (upload_too_large_message_html('index.php'));
 			
 	#1.3 Save it
 		#Set name of file to be the time

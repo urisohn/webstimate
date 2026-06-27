@@ -4,6 +4,7 @@ require_once __DIR__ . '/../includes/turnstile.php';
 verify_turnstile_or_die('index.php');
 require_once __DIR__ . '/../includes/job_traffic.php';
 job_traffic_check_or_die('index.php');
+require_once __DIR__ . '/../includes/upload_limits.php';
 
 $upload_errors = array(
 	UPLOAD_ERR_INI_SIZE   => "file exceeds upload_max_filesize in php.ini",
@@ -29,6 +30,11 @@ $user_file = basename($_FILES["fileToUpload"]["name"]);
 $file_type = pathinfo($user_file, PATHINFO_EXTENSION);
 if ($file_type === "") {
 	die("Sorry, the uploaded file has no extension. Please use .csv, .xlsx, .sav, etc.");
+}
+
+$file_size = $_FILES["fileToUpload"]["size"];
+if (upload_too_large($file_size)) {
+	die(upload_too_large_message_html('index.php'));
 }
 
 $time=time();

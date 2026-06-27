@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/turnstile.php';
+require_once __DIR__ . '/../includes/upload_limits.php';
 $turnstile_site_key = turnstile_site_key();
 ?>
 <head>
@@ -86,6 +87,7 @@ $turnstile_site_key = turnstile_site_key();
 <div class="upload-section">
   <h3>Upload your data</h3>
   <form action="upload.php" method="post" enctype="multipart/form-data" id="uploadForm">
+    <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo UPLOAD_MAX_BYTES; ?>">
     <div class="upload-panel" id="uploadDropzone">
       <span class="glyphicon glyphicon-cloud-upload upload-icon" aria-hidden="true"></span>
       <div class="drop-prompt">
@@ -99,6 +101,7 @@ $turnstile_site_key = turnstile_site_key();
       <div id="turnstileWidget"></div>
     </div>
   </form>
+  <p class="upload-hint"><?php echo htmlspecialchars(UPLOAD_MAX_MESSAGE, ENT_QUOTES, 'UTF-8'); ?></p>
   <p class="upload-hint">No file handy? Download this <a href="example.csv">example datafile</a> and upload it.</p>
 </div>
 
@@ -114,6 +117,17 @@ $turnstile_site_key = turnstile_site_key();
   var pendingFile = null;
   var turnstileWidgetId = null;
   var verifyTimeoutId = null;
+  var uploadMaxBytes = <?php echo UPLOAD_MAX_BYTES; ?>;
+  var uploadMaxMessage = <?php echo json_encode(UPLOAD_MAX_MESSAGE); ?>;
+
+  function fileTooLarge(file) {
+    return file && file.size > uploadMaxBytes;
+  }
+
+  function showFileTooLarge() {
+    pendingFile = null;
+    fileName.textContent = uploadMaxMessage;
+  }
 
   function getTurnstileToken() {
     var el = document.querySelector('[name="cf-turnstile-response"]');
@@ -174,6 +188,10 @@ $turnstile_site_key = turnstile_site_key();
 
   function queueFile(file) {
     if (!file) return;
+    if (fileTooLarge(file)) {
+      showFileTooLarge();
+      return;
+    }
     pendingFile = file;
     if (getTurnstileToken()) {
       submitPendingFile();
