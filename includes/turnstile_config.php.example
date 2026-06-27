@@ -1,0 +1,12 @@
+<?php
+# Cloudflare Turnstile keys for webstimate.org upload forms.
+#
+# Setup:
+# 1. Cloudflare dashboard -> Turnstile -> Add widget
+# 2. Domains: webstimate.org, www.webstimate.org
+# 3. Widget mode: Invisible (recommended for drag-and-drop upload)
+# 4. For webstimate.org, keys are in turnstile_config.php in this repo.
+#    To use elsewhere, copy this example to turnstile_config.php and paste keys below.
+
+define('TURNSTILE_SITE_KEY', 'YOUR_SITE_KEY_HERE');
+define('TURNSTILE_SECRET_KEY', 'YOUR_SECRET_KEY_HERE');
