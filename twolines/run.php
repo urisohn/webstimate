@@ -1,5 +1,7 @@
 <?
 session_start();
+require_once __DIR__ . '/../includes/job_traffic.php';
+job_traffic_check_and_record_or_die('preview.php');
 	#Get version
 		$version=file_get_contents("version.txt");
 

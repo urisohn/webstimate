@@ -2,6 +2,8 @@
 session_start();
 require_once __DIR__ . '/../includes/turnstile.php';
 verify_turnstile_or_die('index.php');
+require_once __DIR__ . '/../includes/job_traffic.php';
+job_traffic_check_or_die('index.php');
 
 #1) File preliminaries
 	#1.1 Get info
