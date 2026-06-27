@@ -79,103 +79,24 @@
   <p class="upload-hint">No file handy? Download this <a href="example.csv">example datafile</a> and upload it.</p>
 </div>
 
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
 <script>
 (function () {
   var dropzone = document.getElementById("uploadDropzone");
   var form = document.getElementById("uploadForm");
   var fileInput = document.getElementById("fileToUpload");
   var fileName = document.getElementById("fileName");
-  var pendingFile = null;
-  var turnstileWidgetId = null;
-  var verifyTimeoutId = null;
 
-  function getTurnstileToken() {
-    var el = document.querySelector('[name="cf-turnstile-response"]');
-    return el ? el.value : "";
-  }
-
-  function clearVerifyTimeout() {
-    if (verifyTimeoutId !== null) {
-      clearTimeout(verifyTimeoutId);
-      verifyTimeoutId = null;
-    }
-  }
-
-  function failVerification(message) {
-    clearVerifyTimeout();
-    pendingFile = null;
-    fileName.textContent = message;
-    if (turnstileWidgetId !== null && typeof turnstile !== "undefined") {
-      turnstile.reset(turnstileWidgetId);
-    }
-  }
-
-  function submitPendingFile() {
-    if (!pendingFile) return;
-    clearVerifyTimeout();
+  function setFile(file) {
+    if (!file) return;
     var dt = new DataTransfer();
-    dt.items.add(pendingFile);
+    dt.items.add(file);
     fileInput.files = dt.files;
-    fileName.textContent = "Uploading " + pendingFile.name + "\u2026";
-    pendingFile = null;
+    fileName.textContent = "Uploading " + file.name + "\u2026";
     form.submit();
   }
 
-  function initTurnstileWidget() {
-    if (turnstileWidgetId !== null || typeof turnstile === "undefined") {
-      return turnstileWidgetId;
-    }
-    turnstileWidgetId = turnstile.render("#turnstileWidget", {
-      sitekey: "<?php echo htmlspecialchars($turnstile_site_key, ENT_QUOTES, 'UTF-8'); ?>",
-      size: "invisible",
-      callback: onTurnstileSuccess,
-      "error-callback": onTurnstileError,
-      "timeout-callback": onTurnstileError
-    });
-    return turnstileWidgetId;
-  }
-
-  window.onTurnstileSuccess = function () {
-    submitPendingFile();
-  };
-
-  window.onTurnstileError = function () {
-    failVerification(
-      "Security check failed. If you use Brave or an ad blocker, allow this site and try again."
-    );
-  };
-
-  function queueFile(file) {
-    if (!file) return;
-    pendingFile = file;
-    if (getTurnstileToken()) {
-      submitPendingFile();
-      return;
-    }
-    fileName.textContent = "Verifying\u2026";
-    if (typeof turnstile === "undefined") {
-      failVerification("Security check failed to load. Please refresh the page.");
-      return;
-    }
-    var widgetId = initTurnstileWidget();
-    if (widgetId === null) {
-      failVerification("Security check failed to start. Please refresh the page.");
-      return;
-    }
-    clearVerifyTimeout();
-    verifyTimeoutId = setTimeout(function () {
-      failVerification(
-        "Verification timed out. In Brave, click the Shields icon and turn off blocking for this site, then try again."
-      );
-    }, 20000);
-    turnstile.execute(widgetId);
-  }
-
-  initTurnstileWidget();
-
   fileInput.addEventListener("change", function () {
-    if (fileInput.files.length) queueFile(fileInput.files[0]);
+    if (fileInput.files.length) setFile(fileInput.files[0]);
   });
 
   dropzone.addEventListener("click", function (e) {
@@ -201,7 +122,7 @@
 
   dropzone.addEventListener("drop", function (e) {
     var files = e.dataTransfer.files;
-    if (files.length) queueFile(files[0]);
+    if (files.length) setFile(files[0]);
   });
 })();
 </script>

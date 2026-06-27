@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once __DIR__ . '/../includes/turnstile.php';
-verify_turnstile_or_die('index.php');
+require_once __DIR__ . '/../includes/upload_spam_check.php';
+verify_upload_spam_or_die('index.php');
 
 $upload_errors = array(
 	UPLOAD_ERR_INI_SIZE   => "file exceeds upload_max_filesize in php.ini",
