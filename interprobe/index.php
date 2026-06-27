@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/../includes/turnstile.php';
+$turnstile_site_key = turnstile_site_key();
+?>
 <head>
   <title>Johnson-Neyman 2.0: Online App for Nonlinear Probing of Interactions</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -20,7 +24,7 @@
     .choose-file-link { color: #337ab7; cursor: pointer; font-size: 14px; font-weight: normal; margin-bottom: 0; text-decoration: underline; }
     .file-name { font-size: 13px; color: #333; margin: 6px 0 0; font-weight: 600; min-height: 16px; }
     .upload-hint { margin-top: 10px; font-size: 13px; color: #666; }
-    .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
+    .turnstile-wrap { height: 0; overflow: hidden; }
     .privacy-block { max-width: 640px; margin: 8px auto 0; }
     .page-footer { margin-top: 24px; padding: 16px 0 32px; font-size: 12px; color: #999; text-align: center; }
   </style>
@@ -53,6 +57,26 @@
 
 <hr>
 
+<div class="modal fade" id="turnstileHelpModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Upload blocked by browser privacy settings</h4>
+      </div>
+      <div class="modal-body">
+        <p>This site uses Cloudflare Turnstile to block automated uploads. Your browser is blocking it.</p>
+        <p><strong>Brave:</strong> Click the Shields icon in the address bar, turn off Shields for webstimate.org, then refresh this page.</p>
+        <p><strong>Other browsers / ad blockers:</strong> Allow <code>challenges.cloudflare.com</code> or disable blocking for this site, then refresh.</p>
+        <p>Alternatively, try Chrome or Firefox with default settings.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="upload-section">
   <h3>Upload your data</h3>
   <form action="upload.php" method="post" enctype="multipart/form-data" id="uploadForm">
@@ -65,32 +89,115 @@
         <p class="file-name" id="fileName"></p>
       </div>
     </div>
-    <label class="hp-field" aria-hidden="true">
-      Website
-      <input type="text" name="website_url" tabindex="-1" autocomplete="off">
-    </label>
+    <div class="turnstile-wrap">
+      <div id="turnstileWidget"></div>
+    </div>
   </form>
   <p class="upload-hint">No file handy? Download this <a href="example.csv">example datafile</a> and upload it.</p>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
 <script>
 (function () {
   var dropzone = document.getElementById("uploadDropzone");
   var form = document.getElementById("uploadForm");
   var fileInput = document.getElementById("fileToUpload");
   var fileName = document.getElementById("fileName");
+  var pendingFile = null;
+  var turnstileWidgetId = null;
+  var verifyTimeoutId = null;
 
-  function setFile(file) {
-    if (!file) return;
+  function getTurnstileToken() {
+    var el = document.querySelector('[name="cf-turnstile-response"]');
+    return el ? el.value : "";
+  }
+
+  function showTurnstileHelp() {
+    clearVerifyTimeout();
+    pendingFile = null;
+    fileName.textContent = "";
+    if (turnstileWidgetId !== null && typeof turnstile !== "undefined") {
+      turnstile.reset(turnstileWidgetId);
+    }
+    if (typeof $ !== "undefined") {
+      $("#turnstileHelpModal").modal("show");
+    }
+  }
+
+  function clearVerifyTimeout() {
+    if (verifyTimeoutId !== null) {
+      clearTimeout(verifyTimeoutId);
+      verifyTimeoutId = null;
+    }
+  }
+
+  function submitPendingFile() {
+    if (!pendingFile) return;
+    clearVerifyTimeout();
     var dt = new DataTransfer();
-    dt.items.add(file);
+    dt.items.add(pendingFile);
     fileInput.files = dt.files;
-    fileName.textContent = "Uploading " + file.name + "\u2026";
+    fileName.textContent = "Uploading " + pendingFile.name + "\u2026";
+    pendingFile = null;
     form.submit();
   }
 
+  function initTurnstileWidget() {
+    if (turnstileWidgetId !== null || typeof turnstile === "undefined") {
+      return turnstileWidgetId;
+    }
+    turnstileWidgetId = turnstile.render("#turnstileWidget", {
+      sitekey: "<?php echo htmlspecialchars($turnstile_site_key, ENT_QUOTES, 'UTF-8'); ?>",
+      size: "invisible",
+      callback: onTurnstileSuccess,
+      "error-callback": onTurnstileError,
+      "timeout-callback": onTurnstileError
+    });
+    return turnstileWidgetId;
+  }
+
+  window.onTurnstileSuccess = function () {
+    submitPendingFile();
+  };
+
+  window.onTurnstileError = function () {
+    showTurnstileHelp();
+  };
+
+  function queueFile(file) {
+    if (!file) return;
+    pendingFile = file;
+    if (getTurnstileToken()) {
+      submitPendingFile();
+      return;
+    }
+    fileName.textContent = "Verifying\u2026";
+    if (typeof turnstile === "undefined") {
+      showTurnstileHelp();
+      return;
+    }
+    var widgetId = initTurnstileWidget();
+    if (widgetId === null) {
+      showTurnstileHelp();
+      return;
+    }
+    clearVerifyTimeout();
+    verifyTimeoutId = setTimeout(showTurnstileHelp, 20000);
+    turnstile.execute(widgetId);
+  }
+
+  initTurnstileWidget();
+
+  setTimeout(function () {
+    if (typeof turnstile === "undefined") {
+      showTurnstileHelp();
+    }
+  }, 3000);
+
   fileInput.addEventListener("change", function () {
-    if (fileInput.files.length) setFile(fileInput.files[0]);
+    if (fileInput.files.length) queueFile(fileInput.files[0]);
   });
 
   dropzone.addEventListener("click", function (e) {
@@ -116,7 +223,7 @@
 
   dropzone.addEventListener("drop", function (e) {
     var files = e.dataTransfer.files;
-    if (files.length) setFile(files[0]);
+    if (files.length) queueFile(files[0]);
   });
 })();
 </script>
