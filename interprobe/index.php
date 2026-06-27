@@ -114,16 +114,14 @@ $turnstile_site_key = turnstile_site_key();
       pendingFile = null;
       return;
     }
-    turnstile.ready(function () {
-      if (turnstileWidgetId === null) {
-        turnstileWidgetId = turnstile.render("#turnstileWidget", {
-          sitekey: "<?php echo htmlspecialchars($turnstile_site_key, ENT_QUOTES, 'UTF-8'); ?>",
-          size: "invisible",
-          callback: onTurnstileSuccess
-        });
-      }
-      turnstile.execute(turnstileWidgetId);
-    });
+    if (turnstileWidgetId === null) {
+      turnstileWidgetId = turnstile.render("#turnstileWidget", {
+        sitekey: "<?php echo htmlspecialchars($turnstile_site_key, ENT_QUOTES, 'UTF-8'); ?>",
+        size: "invisible",
+        callback: onTurnstileSuccess
+      });
+    }
+    turnstile.execute(turnstileWidgetId);
   }
 
   window.onTurnstileSuccess = function () {
