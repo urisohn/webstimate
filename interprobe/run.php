@@ -23,6 +23,27 @@ $variables = isset($_SESSION['variables']) ? $_SESSION['variables'] : array();
 $y = isset($_POST['y']) ? $_POST['y'] : '';
 $x = isset($_POST['x']) ? $_POST['x'] : '';
 $z = isset($_POST['z']) ? $_POST['z'] : '';
+$covariates = isset($_POST['cov']) && is_array($_POST['cov']) ? $_POST['cov'] : array();
+$cov_linear = isset($_POST['cov_linear']) && is_array($_POST['cov_linear']) ? $_POST['cov_linear'] : array();
+
+function valid_var_name($name) {
+	return preg_match('/^[A-Za-z][A-Za-z0-9._]*$/', $name);
+}
+
+function covariate_summary_html($covariates, $cov_linear) {
+	if (empty($covariates)) {
+		return '';
+	}
+	$parts = array();
+	foreach ($covariates as $cov) {
+		if (in_array($cov, $cov_linear, true)) {
+			$parts[] = htmlspecialchars($cov, ENT_QUOTES, 'UTF-8') . ' (linear)';
+		} else {
+			$parts[] = 's(' . htmlspecialchars($cov, ENT_QUOTES, 'UTF-8') . ')';
+		}
+	}
+	return 'Covariates: ' . implode(', ', $parts) . '.<BR><BR>';
+}
 
 function die_alert($msg) {
 	die("<div class='container'><BR><div class='alert alert-danger'>$msg</div></div></body></html>");
@@ -53,6 +74,22 @@ if (!preg_match('/^[A-Za-z][A-Za-z0-9._]*$/', $y) ||
 	die_alert("Variable names contain invalid characters.");
 }
 
+$covariates = array_values(array_unique($covariates));
+foreach ($covariates as $cov) {
+	if (!valid_var_name($cov) || !in_array($cov, $variables, true)) {
+		die_alert("Invalid covariate selection. Please go back and try again.");
+	}
+	if ($cov === $y || $cov === $x || $cov === $z) {
+		die_alert("Covariates cannot be the same as the dependent, focal, or moderator variable.");
+	}
+}
+$cov_linear = array_values(array_unique($cov_linear));
+foreach ($cov_linear as $cov) {
+	if (!in_array($cov, $covariates, true)) {
+		die_alert("Invalid linear covariate selection. Please go back and try again.");
+	}
+}
+
 $y_r = addslashes($y);
 $x_r = addslashes($x);
 $z_r = addslashes($z);
@@ -64,6 +101,53 @@ $data_path = $dir_data.$file;
 $png_path = $dir.$png_file;
 $rout_file = $dir.$time."_interprobe.Rout";
 $batch_script = $dir.$time."_interprobe";
+$build_gam_r = '/home/urisoh5/public_html/webstimate.org/interprobe/build_gam.r';
+
+if (empty($covariates)) {
+	$interprobe_call = <<<RCODE
+	interprobe(
+		x="$x_r",
+		z="$z_r",
+		y="$y_r",
+		data=data.imported,
+		save.as="$png_path"
+	)
+RCODE;
+} else {
+	$cov_r_parts = array();
+	foreach ($covariates as $cov) {
+		$cov_r_parts[] = '"'.addslashes($cov).'"';
+	}
+	$cov_linear_r_parts = array();
+	foreach ($covariates as $cov) {
+		$cov_linear_r_parts[] = in_array($cov, $cov_linear, true) ? 'TRUE' : 'FALSE';
+	}
+	$cov_r = 'c('.implode(', ', $cov_r_parts).')';
+	$cov_linear_r = 'c('.implode(', ', $cov_linear_r_parts).')';
+
+	$interprobe_call = <<<RCODE
+	source("$build_gam_r")
+	library(mgcv)
+	covs <- $cov_r
+	cov_linear <- $cov_linear_r
+	fit <- build_interprobe_gam(
+		y="$y_r",
+		x="$x_r",
+		z="$z_r",
+		data=data.imported,
+		covs=covs,
+		cov_linear=cov_linear
+	)
+	interprobe(
+		model=fit,
+		x="$x_r",
+		z="$z_r",
+		y="$y_r",
+		data=data.imported,
+		save.as="$png_path"
+	)
+RCODE;
+}
 
 $rcode = <<<RCODE
 	.libPaths("/usr/local/R/library")
@@ -76,13 +160,7 @@ $rcode = <<<RCODE
 	if (!exists("data.imported")) stop("Sorry, R was unable to read the file $file")
 
 	sink("$console_file")
-	interprobe(
-		x="$x_r",
-		z="$z_r",
-		y="$y_r",
-		data=data.imported,
-		save.as="$png_path"
-	)
+$interprobe_call
 	sink()
 RCODE;
 
@@ -126,6 +204,7 @@ if (file_exists($statuser_version_file)) {
 	<font size='4'>
 		Probing the interaction of <b><?echo htmlspecialchars($x);?></b> &times;
 		<b><?echo htmlspecialchars($z);?></b> on <b><?echo htmlspecialchars($y);?></b>.<BR><BR>
+		<?echo covariate_summary_html($covariates, $cov_linear); ?>
 		<img src="temp/<?echo $png_file;?>" width="1000"><BR><BR>
 	</font>
 

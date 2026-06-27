@@ -7,9 +7,12 @@ error_reporting(E_ALL);
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <style>
 .jumbotron h1 { font-size: 26px; line-height: 1.35; font-weight: 600; }
-.var-table { width: auto; }
-.var-table th, .var-table td { white-space: nowrap; padding: 6px 12px; text-align: center; }
+.var-table { width: auto; max-width: 100%; }
+.var-table th, .var-table td { padding: 6px 10px; text-align: center; vertical-align: middle; }
+.var-table th { white-space: normal; line-height: 1.25; font-size: 13px; }
+.var-table td:first-child { text-align: left; white-space: nowrap; }
 .var-table label { display: block; margin: 0; cursor: pointer; font-weight: normal; }
+.var-table .cov-linear-label { font-size: 12px; color: #666; }
 </style>
 <?
 
@@ -59,24 +62,29 @@ $_SESSION['variables'] = $variables;
 </div>
 
 <div class="container">
-<font size='4'>Select one variable for each role, then click Run.<BR><BR></font>
+<font size='4'>Select one variable for each role. Optionally mark additional variables as covariates (smooth by default, or linear). Then click Run.<BR><BR></font>
 
-<form method="post" action="run.php">
+<form method="post" action="run.php" id="configureForm">
 <table class="table table-striped var-table">
 	<tr>
 		<th>Variable</th>
-		<th>Dependent (y)</th>
-		<th>Focal predictor (x)</th>
-		<th>Moderator (z)</th>
+		<th>Dependent<br>(y)</th>
+		<th>Focal<br>predictor<br>(x)</th>
+		<th>Moderator<br>(z)</th>
+		<th>Covariate</th>
+		<th>Linear</th>
 	</tr>
 <?
 foreach ($variables as $var) {
 	$safe = htmlspecialchars($var, ENT_QUOTES, 'UTF-8');
-	echo "<tr>";
+	$attr = htmlspecialchars($var, ENT_QUOTES, 'UTF-8');
+	echo "<tr class='var-row' data-var='$attr'>";
 	echo "<td>$safe</td>";
-	echo "<td><label><input type='radio' name='y' value='$safe'></label></td>";
-	echo "<td><label><input type='radio' name='x' value='$safe'></label></td>";
-	echo "<td><label><input type='radio' name='z' value='$safe'></label></td>";
+	echo "<td><label><input type='radio' name='y' value='$safe' class='role-select'></label></td>";
+	echo "<td><label><input type='radio' name='x' value='$safe' class='role-select'></label></td>";
+	echo "<td><label><input type='radio' name='z' value='$safe' class='role-select'></label></td>";
+	echo "<td><label><input type='checkbox' name='cov[]' value='$safe' class='cov-select'></label></td>";
+	echo "<td><label class='cov-linear-label'><input type='checkbox' name='cov_linear[]' value='$safe' class='cov-linear' disabled> linear</label></td>";
 	echo "</tr>\n";
 }
 ?>
@@ -85,3 +93,57 @@ foreach ($variables as $var) {
 <input type="submit" name="submit" value="Run" class="btn btn-primary">
 </form>
 </div>
+
+<script>
+(function () {
+	function rowForInput(input) {
+		return input.closest("tr");
+	}
+
+	function clearCovOnRow(row) {
+		var cov = row.querySelector(".cov-select");
+		var linear = row.querySelector(".cov-linear");
+		if (cov) cov.checked = false;
+		if (linear) {
+			linear.checked = false;
+			linear.disabled = true;
+		}
+	}
+
+	function clearRolesForVar(varName) {
+		document.querySelectorAll(".role-select").forEach(function (input) {
+			if (input.value === varName) {
+				input.checked = false;
+			}
+		});
+	}
+
+	function roleSelectedOnRow(row) {
+		return row.querySelector(".role-select:checked") !== null;
+	}
+
+	document.querySelectorAll(".role-select").forEach(function (input) {
+		input.addEventListener("change", function () {
+			if (input.checked) {
+				clearCovOnRow(rowForInput(input));
+			}
+		});
+	});
+
+	document.querySelectorAll(".cov-select").forEach(function (input) {
+		input.addEventListener("change", function () {
+			var row = rowForInput(input);
+			var linear = row.querySelector(".cov-linear");
+			if (input.checked) {
+				clearRolesForVar(input.value);
+				if (linear) linear.disabled = false;
+			} else {
+				if (linear) {
+					linear.checked = false;
+					linear.disabled = true;
+				}
+			}
+		});
+	});
+})();
+</script>
