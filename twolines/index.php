@@ -1,11 +1,6 @@
-<?php
-require_once __DIR__ . '/../includes/turnstile.php';
-$turnstile_site_key = turnstile_site_key();
-?>
 <head>
   <title>Two-lines test</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <style>
     body { color: #333; }
     .jumbotron { padding-top: 28px; padding-bottom: 28px; margin-bottom: 0; background: #f7f9fc; border-bottom: 1px solid #e3e8ef; }
@@ -28,7 +23,7 @@ $turnstile_site_key = turnstile_site_key();
     .choose-file-link { color: #337ab7; cursor: pointer; font-size: 14px; font-weight: normal; margin-bottom: 0; text-decoration: underline; }
     .file-name { font-size: 13px; color: #333; margin: 6px 0 0; font-weight: 600; min-height: 16px; }
     .upload-hint { margin-top: 10px; font-size: 13px; color: #666; }
-    .turnstile-wrap { height: 0; overflow: hidden; }
+    .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
     .privacy-block { max-width: 640px; margin: 8px auto 0; }
     .page-footer { margin-top: 24px; padding: 16px 0 32px; font-size: 12px; color: #999; text-align: center; }
   </style>
@@ -76,13 +71,15 @@ $turnstile_site_key = turnstile_site_key();
         <p class="file-name" id="fileName"></p>
       </div>
     </div>
-    <div class="turnstile-wrap">
-      <div id="turnstileWidget"></div>
-    </div>
+    <label class="hp-field" aria-hidden="true">
+      Website
+      <input type="text" name="website_url" tabindex="-1" autocomplete="off">
+    </label>
   </form>
   <p class="upload-hint">No file handy? Download this <a href="example.csv">example datafile</a> and upload it.</p>
 </div>
 
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>
 <script>
 (function () {
   var dropzone = document.getElementById("uploadDropzone");
@@ -91,14 +88,32 @@ $turnstile_site_key = turnstile_site_key();
   var fileName = document.getElementById("fileName");
   var pendingFile = null;
   var turnstileWidgetId = null;
+  var verifyTimeoutId = null;
 
   function getTurnstileToken() {
     var el = document.querySelector('[name="cf-turnstile-response"]');
     return el ? el.value : "";
   }
 
+  function clearVerifyTimeout() {
+    if (verifyTimeoutId !== null) {
+      clearTimeout(verifyTimeoutId);
+      verifyTimeoutId = null;
+    }
+  }
+
+  function failVerification(message) {
+    clearVerifyTimeout();
+    pendingFile = null;
+    fileName.textContent = message;
+    if (turnstileWidgetId !== null && typeof turnstile !== "undefined") {
+      turnstile.reset(turnstileWidgetId);
+    }
+  }
+
   function submitPendingFile() {
     if (!pendingFile) return;
+    clearVerifyTimeout();
     var dt = new DataTransfer();
     dt.items.add(pendingFile);
     fileInput.files = dt.files;
@@ -106,6 +121,30 @@ $turnstile_site_key = turnstile_site_key();
     pendingFile = null;
     form.submit();
   }
+
+  function initTurnstileWidget() {
+    if (turnstileWidgetId !== null || typeof turnstile === "undefined") {
+      return turnstileWidgetId;
+    }
+    turnstileWidgetId = turnstile.render("#turnstileWidget", {
+      sitekey: "<?php echo htmlspecialchars($turnstile_site_key, ENT_QUOTES, 'UTF-8'); ?>",
+      size: "invisible",
+      callback: onTurnstileSuccess,
+      "error-callback": onTurnstileError,
+      "timeout-callback": onTurnstileError
+    });
+    return turnstileWidgetId;
+  }
+
+  window.onTurnstileSuccess = function () {
+    submitPendingFile();
+  };
+
+  window.onTurnstileError = function () {
+    failVerification(
+      "Security check failed. If you use Brave or an ad blocker, allow this site and try again."
+    );
+  };
 
   function queueFile(file) {
     if (!file) return;
@@ -116,23 +155,24 @@ $turnstile_site_key = turnstile_site_key();
     }
     fileName.textContent = "Verifying\u2026";
     if (typeof turnstile === "undefined") {
-      fileName.textContent = "Security check failed to load. Please refresh the page.";
-      pendingFile = null;
+      failVerification("Security check failed to load. Please refresh the page.");
       return;
     }
-    if (turnstileWidgetId === null) {
-      turnstileWidgetId = turnstile.render("#turnstileWidget", {
-        sitekey: "<?php echo htmlspecialchars($turnstile_site_key, ENT_QUOTES, 'UTF-8'); ?>",
-        size: "invisible",
-        callback: onTurnstileSuccess
-      });
+    var widgetId = initTurnstileWidget();
+    if (widgetId === null) {
+      failVerification("Security check failed to start. Please refresh the page.");
+      return;
     }
-    turnstile.execute(turnstileWidgetId);
+    clearVerifyTimeout();
+    verifyTimeoutId = setTimeout(function () {
+      failVerification(
+        "Verification timed out. In Brave, click the Shields icon and turn off blocking for this site, then try again."
+      );
+    }, 20000);
+    turnstile.execute(widgetId);
   }
 
-  window.onTurnstileSuccess = function () {
-    submitPendingFile();
-  };
+  initTurnstileWidget();
 
   fileInput.addEventListener("change", function () {
     if (fileInput.files.length) queueFile(fileInput.files[0]);

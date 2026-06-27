@@ -1,11 +1,6 @@
-<?php
-require_once __DIR__ . '/../includes/turnstile.php';
-$turnstile_site_key = turnstile_site_key();
-?>
 <head>
   <title>Johnson-Neyman 2.0: Online App for Nonlinear Probing of Interactions</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <style>
     body { color: #333; }
     .jumbotron { padding-top: 28px; padding-bottom: 28px; margin-bottom: 0; background: #f7f9fc; border-bottom: 1px solid #e3e8ef; }
@@ -25,7 +20,7 @@ $turnstile_site_key = turnstile_site_key();
     .choose-file-link { color: #337ab7; cursor: pointer; font-size: 14px; font-weight: normal; margin-bottom: 0; text-decoration: underline; }
     .file-name { font-size: 13px; color: #333; margin: 6px 0 0; font-weight: 600; min-height: 16px; }
     .upload-hint { margin-top: 10px; font-size: 13px; color: #666; }
-    .turnstile-wrap { height: 0; overflow: hidden; }
+    .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
     .privacy-block { max-width: 640px; margin: 8px auto 0; }
     .page-footer { margin-top: 24px; padding: 16px 0 32px; font-size: 12px; color: #999; text-align: center; }
   </style>
@@ -70,9 +65,10 @@ $turnstile_site_key = turnstile_site_key();
         <p class="file-name" id="fileName"></p>
       </div>
     </div>
-    <div class="turnstile-wrap">
-      <div id="turnstileWidget"></div>
-    </div>
+    <label class="hp-field" aria-hidden="true">
+      Website
+      <input type="text" name="website_url" tabindex="-1" autocomplete="off">
+    </label>
   </form>
   <p class="upload-hint">No file handy? Download this <a href="example.csv">example datafile</a> and upload it.</p>
 </div>
@@ -83,53 +79,18 @@ $turnstile_site_key = turnstile_site_key();
   var form = document.getElementById("uploadForm");
   var fileInput = document.getElementById("fileToUpload");
   var fileName = document.getElementById("fileName");
-  var pendingFile = null;
-  var turnstileWidgetId = null;
 
-  function getTurnstileToken() {
-    var el = document.querySelector('[name="cf-turnstile-response"]');
-    return el ? el.value : "";
-  }
-
-  function submitPendingFile() {
-    if (!pendingFile) return;
+  function setFile(file) {
+    if (!file) return;
     var dt = new DataTransfer();
-    dt.items.add(pendingFile);
+    dt.items.add(file);
     fileInput.files = dt.files;
-    fileName.textContent = "Uploading " + pendingFile.name + "\u2026";
-    pendingFile = null;
+    fileName.textContent = "Uploading " + file.name + "\u2026";
     form.submit();
   }
 
-  function queueFile(file) {
-    if (!file) return;
-    pendingFile = file;
-    if (getTurnstileToken()) {
-      submitPendingFile();
-      return;
-    }
-    fileName.textContent = "Verifying\u2026";
-    if (typeof turnstile === "undefined") {
-      fileName.textContent = "Security check failed to load. Please refresh the page.";
-      pendingFile = null;
-      return;
-    }
-    if (turnstileWidgetId === null) {
-      turnstileWidgetId = turnstile.render("#turnstileWidget", {
-        sitekey: "<?php echo htmlspecialchars($turnstile_site_key, ENT_QUOTES, 'UTF-8'); ?>",
-        size: "invisible",
-        callback: onTurnstileSuccess
-      });
-    }
-    turnstile.execute(turnstileWidgetId);
-  }
-
-  window.onTurnstileSuccess = function () {
-    submitPendingFile();
-  };
-
   fileInput.addEventListener("change", function () {
-    if (fileInput.files.length) queueFile(fileInput.files[0]);
+    if (fileInput.files.length) setFile(fileInput.files[0]);
   });
 
   dropzone.addEventListener("click", function (e) {
@@ -155,7 +116,7 @@ $turnstile_site_key = turnstile_site_key();
 
   dropzone.addEventListener("drop", function (e) {
     var files = e.dataTransfer.files;
-    if (files.length) queueFile(files[0]);
+    if (files.length) setFile(files[0]);
   });
 })();
 </script>
