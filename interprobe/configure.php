@@ -9,17 +9,16 @@ error_reporting(E_ALL);
 body { color: #333; }
 .jumbotron { padding-top: 28px; padding-bottom: 28px; margin-bottom: 0; background: #f7f9fc; border-bottom: 1px solid #e3e8ef; }
 .jumbotron h1 { font-size: 26px; line-height: 1.35; font-weight: 600; letter-spacing: -0.3px; }
-.configure-panel { max-width: 520px; margin: 0 auto; padding: 28px 15px 32px; }
-.configure-intro { font-size: 16px; line-height: 1.5; margin: 0 0 18px; }
+.configure-panel { max-width: 640px; margin: 0 auto; padding: 28px 15px 32px; }
+.configure-intro { font-size: 19.2px; line-height: 1.5; margin: 0 0 18px; font-weight: bold; }
 .var-table { width: 100%; margin-bottom: 0; }
 .var-table th, .var-table td { padding: 6px 8px; text-align: center; vertical-align: middle; }
 .var-table th { white-space: normal; line-height: 1.25; font-size: 13px; }
 .var-table td:first-child { text-align: left; white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
 .var-table label { display: block; margin: 0; cursor: pointer; font-weight: normal; }
-.var-table .cov-linear-label { font-size: 12px; color: #666; }
 .var-table-toolbar {
 	display: flex;
-	justify-content: flex-end;
+	justify-content: flex-start;
 	align-items: center;
 	gap: 12px;
 	margin-bottom: 8px;
@@ -169,7 +168,7 @@ $show_covariates = count($variables) > 3;
 	<tr>
 		<th>Variable</th>
 		<th>Dependent<br>(y)</th>
-		<th>Focal<br>predictor<br>(x)</th>
+		<th>Focal predictor<br>(x)</th>
 		<th>Moderator<br>(z)</th>
 <? if ($show_covariates) { ?>
 		<th class="cov-col">Covariate</th>
@@ -187,7 +186,7 @@ foreach ($variables as $var) {
 	echo "<td><label><input type='radio' name='z' value='$safe' class='role-select'></label></td>";
 	if ($show_covariates) {
 		echo "<td class='cov-col'><label><input type='checkbox' name='cov[]' value='$safe' class='cov-select'></label></td>";
-		echo "<td class='cov-col cov-linear-col'><label class='cov-linear-label'><input type='checkbox' name='cov_linear[]' value='$safe' class='cov-linear' disabled> linear</label></td>";
+		echo "<td class='cov-col cov-linear-col'><label><input type='checkbox' name='cov_linear[]' value='$safe' class='cov-linear' disabled></label></td>";
 	}
 	echo "</tr>\n";
 }
