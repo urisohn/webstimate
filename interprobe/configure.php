@@ -10,84 +10,70 @@ body { color: #333; }
 .jumbotron { padding-top: 28px; padding-bottom: 28px; margin-bottom: 0; background: #f7f9fc; border-bottom: 1px solid #e3e8ef; }
 .jumbotron h1 { font-size: 26px; line-height: 1.35; font-weight: 600; letter-spacing: -0.3px; }
 .configure-panel { max-width: 640px; margin: 0 auto; padding: 28px 15px 32px; }
-.configure-intro { font-size: 19.2px; line-height: 1.5; margin: 0 0 18px; font-weight: bold; }
+.configure-intro-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 18px;
+}
+.configure-intro { font-size: 19.2px; line-height: 1.5; margin: 0; font-weight: bold; flex: 1; }
 .var-table { width: 100%; margin-bottom: 0; }
 .var-table th, .var-table td { padding: 6px 8px; text-align: center; vertical-align: middle; }
 .var-table th { white-space: normal; line-height: 1.25; font-size: 13px; }
 .var-table td:first-child { text-align: left; white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
 .var-table label { display: block; margin: 0; cursor: pointer; font-weight: normal; }
-.var-table-toolbar {
-	display: flex;
-	justify-content: flex-start;
-	align-items: center;
-	gap: 12px;
-	margin-bottom: 8px;
-	flex-wrap: wrap;
-}
-.model-toggle-box {
+.regression-option {
 	display: flex;
 	align-items: center;
-	gap: 10px;
+	gap: 6px;
+	margin-top: 12px;
 	font-size: 13px;
-	color: #444;
-	padding: 8px 14px;
-	border: 1px solid #ccc;
-	border-radius: 8px;
-	background: #fafbfc;
+	color: #777;
+	font-weight: normal;
 }
-.model-toggle-box .toggle-label { font-weight: 600; color: #333; white-space: nowrap; }
-.model-toggle-box .toggle-option {
-	white-space: nowrap;
-	color: #999;
-	font-weight: 400;
-	transition: color 0.2s, font-weight 0.2s;
-}
-.model-toggle-box .toggle-option.active { color: #337ab7; font-weight: 600; }
-.mac-toggle {
-	position: relative;
-	display: inline-block;
-	width: 44px;
-	height: 26px;
+.regression-option label {
 	margin: 0;
+	cursor: pointer;
+	font-weight: normal;
+}
+.regression-info-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 18px;
+	height: 18px;
+	padding: 0;
+	border: 1px solid #bbb;
+	border-radius: 50%;
+	background: #f5f5f5;
+	color: #666;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1;
+	cursor: pointer;
 	vertical-align: middle;
 }
-.mac-toggle input {
-	opacity: 0;
-	width: 0;
-	height: 0;
+.regression-info-btn:hover,
+.regression-info-btn:focus {
+	background: #e8e8e8;
+	border-color: #999;
+	color: #444;
+	outline: none;
 }
-.mac-slider {
-	position: absolute;
-	cursor: pointer;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: #ccc;
-	border-radius: 26px;
-	transition: background-color 0.2s;
+.regression-info-panel {
+	display: none;
+	margin-top: 10px;
+	padding: 10px 12px;
+	font-size: 13px;
+	line-height: 1.5;
+	color: #555;
+	background: #f8f9fa;
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+	max-width: 520px;
 }
-.mac-slider:before {
-	position: absolute;
-	content: "";
-	height: 22px;
-	width: 22px;
-	left: 2px;
-	bottom: 2px;
-	background-color: white;
-	border-radius: 50%;
-	transition: transform 0.2s;
-	box-shadow: 0 1px 3px rgba(0,0,0,0.25);
-}
-.mac-toggle input:checked + .mac-slider {
-	background-color: #34c759;
-}
-.mac-toggle input:checked + .mac-slider:before {
-	transform: translateX(18px);
-}
-.mac-toggle input:focus-visible + .mac-slider {
-	box-shadow: 0 0 0 2px #fff, 0 0 0 4px #337ab7;
-}
+.regression-info-panel.visible { display: block; }
 .var-table .cov-col { display: none; }
 .configure-actions { margin-top: 16px; }
 .configure-actions .btn-primary { min-width: 120px; }
@@ -146,24 +132,15 @@ $show_covariates = count($variables) > 3;
 
 <div class="container">
 <div class="configure-panel">
-<p class="configure-intro">Select one variable for each role, then click Run.</p>
+<div class="configure-intro-row">
+<p class="configure-intro">Select one variable for each role.</p>
+<? if ($show_covariates) { ?>
+<button type="button" id="addCovariatesBtn" class="btn btn-default btn-sm">Add covariates</button>
+<? } ?>
+</div>
 
 <form method="post" action="run.php" id="configureForm">
 <input type="hidden" name="model_type" id="modelType" value="gam">
-<div class="var-table-toolbar">
-	<div class="model-toggle-box">
-		<span class="toggle-label">Probe interaction with:</span>
-		<span class="toggle-option" id="toggleRegression">Regression</span>
-		<label class="mac-toggle" title="Switch between regression and GAM">
-			<input type="checkbox" id="modelGamToggle" checked aria-label="Use GAM instead of regression">
-			<span class="mac-slider"></span>
-		</label>
-		<span class="toggle-option active" id="toggleGam">GAM</span>
-	</div>
-<? if ($show_covariates) { ?>
-	<button type="button" id="addCovariatesBtn" class="btn btn-default btn-sm">Add covariates</button>
-<? } ?>
-</div>
 <table class="table table-striped var-table" id="varTable">
 	<tr>
 		<th>Variable</th>
@@ -194,6 +171,13 @@ foreach ($variables as $var) {
 </table>
 <div class="configure-actions">
 <input type="submit" name="submit" value="Run" class="btn btn-primary btn-lg">
+<div class="regression-option">
+	<label><input type="checkbox" id="runRegressionInstead"> Run regression instead of GAM</label>
+	<button type="button" class="regression-info-btn" id="regressionInfoBtn" title="Click for info" aria-label="Click for info">?</button>
+</div>
+<div class="regression-info-panel" id="regressionInfoPanel">
+	If you want to run the legacy approach to probing interactions, relying on arbitrary linearity assumptions, check the box. This can be useful when contrasting results to those in published papers, or when exploring nonlinearities in a new paper.
+</div>
 </div>
 </form>
 </div>
@@ -203,31 +187,32 @@ foreach ($variables as $var) {
 (function () {
 	var varTable = document.getElementById("varTable");
 	var modelType = document.getElementById("modelType");
-	var modelGamToggle = document.getElementById("modelGamToggle");
-
-	var toggleRegression = document.getElementById("toggleRegression");
-	var toggleGam = document.getElementById("toggleGam");
+	var runRegressionInstead = document.getElementById("runRegressionInstead");
+	var regressionInfoBtn = document.getElementById("regressionInfoBtn");
+	var regressionInfoPanel = document.getElementById("regressionInfoPanel");
 
 	function syncModelType() {
-		if (modelGamToggle.checked) {
-			modelType.value = "gam";
-			varTable.classList.remove("model-linear");
-		} else {
+		if (runRegressionInstead.checked) {
 			modelType.value = "linear";
 			varTable.classList.add("model-linear");
 			document.querySelectorAll(".cov-linear").forEach(function (input) {
 				input.checked = false;
 			});
+		} else {
+			modelType.value = "gam";
+			varTable.classList.remove("model-linear");
 		}
-		toggleRegression.classList.toggle("active", !modelGamToggle.checked);
-		toggleGam.classList.toggle("active", modelGamToggle.checked);
 		if (typeof updateAllRowCovStates === "function") {
 			updateAllRowCovStates();
 		}
 	}
 
-	modelGamToggle.addEventListener("change", syncModelType);
+	runRegressionInstead.addEventListener("change", syncModelType);
 	syncModelType();
+
+	regressionInfoBtn.addEventListener("click", function () {
+		regressionInfoPanel.classList.toggle("visible");
+	});
 
 <? if ($show_covariates) { ?>
 	function rowForInput(input) {
