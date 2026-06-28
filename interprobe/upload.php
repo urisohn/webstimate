@@ -58,6 +58,7 @@ if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target)) {
 	$_SESSION['dir_data'] = $dir_data;
 	$_SESSION['dir'] = $dir;
 	$_SESSION['file'] = $file;
+	$_SESSION['original_file'] = $user_file;
 	$_SESSION['time'] = $time;
 	$_SESSION['extension'] = $file_type;
 	echo ('<meta http-equiv="refresh" content="0; url=configure.php">');

@@ -9,12 +9,73 @@ error_reporting(E_ALL);
 <head>
   <title>Johnson-Neyman 2.0: Online App for Nonlinear Probing of Interactions - Results</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <style>.jumbotron h1 { font-size: 26px; line-height: 1.35; font-weight: 600; }</style>
+  <style>
+    .jumbotron h1 { font-size: 26px; line-height: 1.35; font-weight: 600; }
+    .output-panel {
+      background: #f4f5f7;
+      border: 1px solid #e3e6ea;
+      border-radius: 4px;
+      padding: 16px 18px;
+      margin-top: 16px;
+    }
+    .output-panel-interprobe {
+      font-size: 16px;
+      line-height: 1.55;
+      color: #222;
+    }
+    .output-panel-interprobe .output-panel-pre {
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+    }
+    .output-panel-r-code {
+      font-size: 12px;
+      line-height: 1.55;
+      color: #444;
+    }
+    .output-panel-r-code h3 {
+      margin: 0 0 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+    .output-panel-r-code .output-panel-intro {
+      margin: 0 0 12px;
+      color: #666;
+    }
+    .output-panel-error {
+      font-size: 16px;
+      line-height: 1.55;
+      color: #222;
+    }
+    .output-panel-error-msg {
+      margin-bottom: 12px;
+    }
+    .output-panel-pre {
+      margin: 0;
+      padding: 0;
+      border: none;
+      background: none;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    .output-panel-r-code .output-panel-pre {
+      font-size: 12px;
+      color: #444;
+    }
+    .output-panel-meta {
+      margin: 0 0 10px;
+      font-size: 13px;
+      color: #666;
+    }
+  </style>
 </head>
 <body>
 <?
 
 $file      = $_SESSION['file'];
+$original_file = isset($_SESSION['original_file']) ? $_SESSION['original_file'] : $file;
 $dir       = $_SESSION['dir'];
 $dir_data  = $_SESSION['dir_data'];
 $time      = $_SESSION['time'];
@@ -59,9 +120,14 @@ function r_quote($name) {
 	return '"' . str_replace('"', '\\"', $name) . '"';
 }
 
-function r_commands_display($y, $x, $z, $png_file, $model_type, $covariates, $cov_linear, $build_gam_r) {
-	$save_as = 'temp/' . $png_file;
-	$lines = array('library(rio)', 'library(statuser)', 'data.imported <- import("your_data_file")', '');
+function r_commands_text($y, $x, $z, $data_filename, $model_type, $covariates, $cov_linear) {
+	$save_as = 'interprobe_plot.png';
+	$lines = array(
+		'library(rio)',
+		'library(statuser)',
+		'data.imported <- import(' . r_quote($data_filename) . ')',
+		''
+	);
 
 	if (empty($covariates) && $model_type === 'gam') {
 		$lines[] = 'interprobe(';
@@ -81,7 +147,7 @@ function r_commands_display($y, $x, $z, $png_file, $model_type, $covariates, $co
 		$lines[] = '  save.as = ' . r_quote($save_as);
 		$lines[] = ')';
 	} elseif ($model_type === 'gam') {
-		$lines[] = 'source(' . r_quote($build_gam_r) . ')';
+		$lines[] = 'source("build_gam.r")';
 		$lines[] = 'library(mgcv)';
 		$cov_parts = array();
 		foreach ($covariates as $cov) {
@@ -110,7 +176,7 @@ function r_commands_display($y, $x, $z, $png_file, $model_type, $covariates, $co
 		$lines[] = '  save.as = ' . r_quote($save_as);
 		$lines[] = ')';
 	} else {
-		$lines[] = 'source(' . r_quote($build_gam_r) . ')';
+		$lines[] = 'source("build_gam.r")';
 		$cov_parts = array();
 		foreach ($covariates as $cov) {
 			$cov_parts[] = r_quote($cov);
@@ -133,7 +199,25 @@ function r_commands_display($y, $x, $z, $png_file, $model_type, $covariates, $co
 		$lines[] = ')';
 	}
 
-	return "--- R commands used ---\n\n" . implode("\n", $lines) . "\n\n--- interprobe output ---\n\n";
+	return implode("\n", $lines);
+}
+
+function r_commands_panel_html($r_commands_text) {
+	$body =
+		'<h3>Reproducible R Code Produced</h3>' .
+		'<p class="output-panel-intro">We show the R code that was run (again hiding the paths). Use the file name you entered, not the temp name.</p>' .
+		'<pre class="output-panel-pre">' . htmlspecialchars($r_commands_text, ENT_QUOTES, 'UTF-8') . '</pre>';
+	return r_output_panel_html($body, 'output-panel-r-code');
+}
+
+function interprobe_output_panel_html($console_text, $statuser_version_label) {
+	$meta = '';
+	if ($statuser_version_label !== '') {
+		$meta = '<p class="output-panel-meta">' . htmlspecialchars($statuser_version_label, ENT_QUOTES, 'UTF-8') . '</p>';
+	}
+	$body = $meta .
+		'<pre class="output-panel-pre">' . htmlspecialchars($console_text, ENT_QUOTES, 'UTF-8') . '</pre>';
+	return r_output_panel_html($body, 'output-panel-interprobe');
 }
 
 function die_alert($msg) {
@@ -141,11 +225,16 @@ function die_alert($msg) {
 }
 
 function die_run_error($msg, $r_output = '') {
+	$error_body = '<div class="output-panel-error-msg">' . $msg . '</div>';
+	if ($r_output !== '') {
+		$error_body .= '<pre class="output-panel-pre">' .
+			htmlspecialchars($r_output, ENT_QUOTES, 'UTF-8') .
+			'</pre>';
+	}
 	die(
 		"<div class='jumbotron text-center'><h1>Johnson-Neyman 2.0: Online App for Nonlinear Probing of Interactions</h1></div>".
 		"<div class='container'>".
-		"<div class='alert alert-danger'>$msg</div>".
-		r_error_output_html($r_output).
+		r_output_panel_html($error_body, 'output-panel-error').
 		"<BR><a href='configure.php' class='btn btn-default'>Go back</a>".
 		"</div></body></html>"
 	);
@@ -319,15 +408,15 @@ $console_text = "";
 if (file_exists($console_file)) {
 	$console_text = file_get_contents($console_file);
 }
-$console_text = r_commands_display(
-	$y, $x, $z, $png_file, $model_type, $covariates, $cov_linear, $build_gam_r
-) . $console_text;
+$r_commands_text = r_commands_text(
+	$y, $x, $z, $original_file, $model_type, $covariates, $cov_linear
+);
 
-$statuser_version_label = "(statuser)";
+$statuser_version_label = "statuser";
 if (file_exists($statuser_version_file)) {
 	$statuser_ver = trim(file_get_contents($statuser_version_file));
 	if ($statuser_ver !== "") {
-		$statuser_version_label = "(statuser v".htmlspecialchars($statuser_ver, ENT_QUOTES, 'UTF-8').")";
+		$statuser_version_label = "statuser v" . htmlspecialchars($statuser_ver, ENT_QUOTES, 'UTF-8');
 	}
 }
 ?>
@@ -346,10 +435,9 @@ if (file_exists($statuser_version_file)) {
 		<img src="temp/<?echo $png_file;?>" width="1000"><BR><BR>
 	</font>
 
-	<h2><b>Console output</b> <?echo $statuser_version_label;?></h2>
-	<textarea readonly rows="20" style="width:100%; font-family:monospace;"><?echo htmlspecialchars($console_text);?></textarea>
-	<BR>
-	<font size="2" color="gray">(R commands used, then output from interprobe() when running in R)</font>
+	<h2><b>Output</b></h2>
+	<?echo interprobe_output_panel_html($console_text, $statuser_version_label); ?>
+	<?echo r_commands_panel_html($r_commands_text); ?>
 </div>
 
 <?

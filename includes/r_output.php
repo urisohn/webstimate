@@ -56,13 +56,24 @@ function read_r_batch_output($rout_file, $exec_output = array()) {
 	return sanitize_r_output_for_display($combined);
 }
 
+function r_output_panel_html($body_html, $extra_class = '') {
+	$class = 'output-panel';
+	if ($extra_class !== '') {
+		$class .= ' ' . $extra_class;
+	}
+	return '<div class="' . $class . '" style="background:#f4f5f7;border:1px solid #e3e6ea;border-radius:4px;padding:16px 18px;margin-top:16px;">' .
+		$body_html .
+		'</div>';
+}
+
 function r_error_output_html($r_output) {
 	if ($r_output === '') {
 		return '';
 	}
-
-	return '<h3>R output</h3>' .
-		'<textarea readonly rows="20" style="width:100%; font-family:monospace;">' .
+	return r_output_panel_html(
+		'<pre class="output-panel-pre">' .
 		htmlspecialchars($r_output, ENT_QUOTES, 'UTF-8') .
-		'</textarea>';
+		'</pre>',
+		'output-panel-error'
+	);
 }
