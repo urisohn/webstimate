@@ -1,6 +1,7 @@
 <?
 session_start();
 require_once __DIR__ . '/../includes/job_traffic.php';
+require_once __DIR__ . '/../includes/r_output.php';
 job_traffic_check_and_record_or_die('configure.php');
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
@@ -139,11 +140,12 @@ function die_alert($msg) {
 	die("<div class='container'><BR><div class='alert alert-danger'>$msg</div></div></body></html>");
 }
 
-function die_run_error($msg) {
+function die_run_error($msg, $r_output = '') {
 	die(
 		"<div class='jumbotron text-center'><h1>Johnson-Neyman 2.0: Online App for Nonlinear Probing of Interactions</h1></div>".
 		"<div class='container'>".
 		"<div class='alert alert-danger'>$msg</div>".
+		r_error_output_html($r_output).
 		"<BR><a href='configure.php' class='btn btn-default'>Go back</a>".
 		"</div></body></html>"
 	);
@@ -308,7 +310,8 @@ exec("/usr/bin/R --no-save CMD BATCH ".$time."_interprobe 2>&1", $exec_output, $
 if (!file_exists($png_path)) {
 	die_run_error(
 		"Something went wrong running interprobe on your data. Please check your variable selection and try again. ".
-		"Email <a href='mailto:urisohn@gmail.com'>Uri</a> if you think something is broken."
+		"Email <a href='mailto:urisohn@gmail.com'>Uri</a> if you think something is broken.",
+		read_r_batch_output($rout_file, $exec_output)
 	);
 }
 

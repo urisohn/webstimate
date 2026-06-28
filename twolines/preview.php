@@ -2,6 +2,7 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+require_once __DIR__ . '/../includes/r_output.php';
 
 	#Get version
 		$version=file_get_contents("version.txt");
@@ -34,8 +35,9 @@ RCODE;
 //Save  the R code as a text file
 	file_put_contents($dir.$time, $rcode);
 //Execute it
-	chdir($dir); 
-	exec("/usr/bin/R --no-save CMD BATCH $time ");
+	chdir($dir);
+	$rout_file = $dir.$time.".Rout";
+	exec("/usr/bin/R --no-save CMD BATCH $time 2>&1", $exec_output, $exec_code);
 
 	
 //Verify R Code executed (here i check if the preview file was generated, if not, die
@@ -56,9 +58,16 @@ RCODE;
 	#Change directory
 		chdir($dir_data); 
 	#See if preview file was created, which means R can read it, if not, die()
-		if (!file_exists("preview_$file")) die ("<font size='5'>Sorry, your file did not upload, perhaps you used a format the app does not understand. The app relies on the RIO package in R and can read .csv, .xlsx, .sav, among ".
-		 "many other formats, but cannot read everything. You can check out <a href='https://cran.r-project.org/web/packages/rio/vignettes/rio.html'>here</a> if your format is supported.<BR><BR>If you think there is a problem ".
-		 "with the app, please let Uri know (urisohn@gmail.com)") ;
+		if (!file_exists("preview_$file")) {
+			$r_output = read_r_batch_output($rout_file, $exec_output);
+			die(
+				"<div class='container'><div class='alert alert-danger'><font size='5'>Sorry, your file did not upload, perhaps you used a format the app does not understand. The app relies on the RIO package in R and can read .csv, .xlsx, .sav, among ".
+				"many other formats, but cannot read everything. You can check out <a href='https://cran.r-project.org/web/packages/rio/vignettes/rio.html'>here</a> if your format is supported.<BR><BR>If you think there is a problem ".
+				"with the app, please let Uri know (urisohn@gmail.com)</font></div>".
+				r_error_output_html($r_output).
+				"<BR><a href='index.php' class='btn btn-default'>Go back</a></div>"
+			);
+		}
     
 	#If we got this far, the file worked, show it ?>
 	

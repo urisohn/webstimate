@@ -1,6 +1,7 @@
 <?
 session_start();
 require_once __DIR__ . '/../includes/job_traffic.php';
+require_once __DIR__ . '/../includes/r_output.php';
 job_traffic_check_and_record_or_die('preview.php');
 	#Get version
 		$version=file_get_contents("version.txt");
@@ -90,14 +91,22 @@ RCODE;
 	if (file_exists($calc_file_name)) unlink($calc_file_name);	
 
 //Execute it
-	exec("/usr/bin/R  --no-save CMD BATCH ".$time."_twolines");
+	$rout_file = $dir.$time."_twolines.Rout";
+	exec("/usr/bin/R  --no-save CMD BATCH ".$time."_twolines 2>&1", $exec_output, $exec_code);
 	
 
 //Read the calculations into an array called calc[] 
 	    $calc_file_name="calc_$time.csv";
-		if (!file_exists($calc_file_name)) die ("<div class='container'><BR><div class='alert alert-danger'>Something went wrong, R was unable to run the model you entered.".
-								" Please go back and check your syntax.".
-								"<BR>Please email <a href='mailto:urisohn@gmail.com'>Uri</a> if you think something is wrong.</div></div>");
+		if (!file_exists($calc_file_name)) {
+			$r_output = read_r_batch_output($rout_file, $exec_output);
+			die(
+				"<div class='container'><BR><div class='alert alert-danger'>Something went wrong, R was unable to run the model you entered.".
+				" Please go back and check your syntax.".
+				"<BR>Please email <a href='mailto:urisohn@gmail.com'>Uri</a> if you think something is wrong.</div>".
+				r_error_output_html($r_output).
+				"<BR><a href='preview.php' class='btn btn-default'>Go back</a></div>"
+			);
+		}
 			$file=fopen($calc_file_name,"r");
 			$calc = array();
 			$header = null;

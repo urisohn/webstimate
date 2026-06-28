@@ -1,6 +1,7 @@
 <?
 session_start();
 error_reporting(E_ALL);
+require_once __DIR__ . '/../includes/r_output.php';
 ?>
 <head>
   <title>Johnson-Neyman 2.0: Online App for Nonlinear Probing of Interactions</title>
@@ -103,13 +104,17 @@ $vars_file = $dir_data."vars_".$file;
 
 file_put_contents($dir.$time."_vars", $rcode);
 chdir($dir);
-exec("/usr/bin/R --no-save CMD BATCH ".$time."_vars");
+$rout_file = $dir.$time."_vars.Rout";
+exec("/usr/bin/R --no-save CMD BATCH ".$time."_vars 2>&1", $exec_output, $exec_code);
 
 if (!file_exists($vars_file)) {
+	$r_output = read_r_batch_output($rout_file, $exec_output);
 	die(
 		"<div class='container'><div class='alert alert-danger'><font size='5'>Sorry, your file did not upload, or the app could not read it. The app relies on the RIO package in R and can read .csv, .xlsx, .sav, among ".
 		"many other formats. See <a href='https://cran.r-project.org/web/packages/rio/vignettes/rio.html'>supported formats</a>.<BR><BR>".
-		"If you think something is broken, please let Uri know (urisohn@gmail.com)</font></div></div>"
+		"If you think something is broken, please let Uri know (urisohn@gmail.com)</font></div>".
+		r_error_output_html($r_output).
+		"<BR><a href='index.php' class='btn btn-default'>Go back</a></div>"
 	);
 }
 
