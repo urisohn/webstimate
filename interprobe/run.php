@@ -146,13 +146,31 @@ function r_commands_text($y, $x, $z, $model_type, $covariates, $cov_linear) {
 		$lines[] = '  data = data.imported,';
 		$lines[] = '  save.as = ' . r_quote($save_as);
 		$lines[] = ')';
-	} elseif (empty($covariates) && $model_type === 'linear') {
+	} elseif ($model_type === 'linear') {
+		$lines[] = 'source("build_gam.r")';
+		if (empty($covariates)) {
+			$lines[] = 'covs <- character(0)';
+		} else {
+			$cov_parts = array();
+			foreach ($covariates as $cov) {
+				$cov_parts[] = r_quote($cov);
+			}
+			$lines[] = 'covs <- c(' . implode(', ', $cov_parts) . ')';
+		}
+		$lines[] = 'data.imported <- prepare_interprobe_linear_data(data.imported, ' . r_quote($y) . ', ' . r_quote($x) . ', ' . r_quote($z) . ', covs)';
+		$lines[] = 'fit <- build_interprobe_linear(';
+		$lines[] = '  y = ' . r_quote($y) . ',';
+		$lines[] = '  x = ' . r_quote($x) . ',';
+		$lines[] = '  z = ' . r_quote($z) . ',';
+		$lines[] = '  data = data.imported,';
+		$lines[] = '  covs = covs';
+		$lines[] = ')';
 		$lines[] = 'interprobe(';
+		$lines[] = '  model = fit,';
 		$lines[] = '  x = ' . r_quote($x) . ',';
 		$lines[] = '  z = ' . r_quote($z) . ',';
 		$lines[] = '  y = ' . r_quote($y) . ',';
 		$lines[] = '  data = data.imported,';
-		$lines[] = '  model = linear,';
 		$lines[] = '  save.as = ' . r_quote($save_as);
 		$lines[] = ')';
 	} elseif ($model_type === 'gam') {
@@ -174,28 +192,6 @@ function r_commands_text($y, $x, $z, $model_type, $covariates, $cov_linear) {
 		$lines[] = '  data = data.imported,';
 		$lines[] = '  covs = covs,';
 		$lines[] = '  cov_linear = cov_linear';
-		$lines[] = ')';
-		$lines[] = 'interprobe(';
-		$lines[] = '  model = fit,';
-		$lines[] = '  x = ' . r_quote($x) . ',';
-		$lines[] = '  z = ' . r_quote($z) . ',';
-		$lines[] = '  y = ' . r_quote($y) . ',';
-		$lines[] = '  data = data.imported,';
-		$lines[] = '  save.as = ' . r_quote($save_as);
-		$lines[] = ')';
-	} else {
-		$lines[] = 'source("build_gam.r")';
-		$cov_parts = array();
-		foreach ($covariates as $cov) {
-			$cov_parts[] = r_quote($cov);
-		}
-		$lines[] = 'covs <- c(' . implode(', ', $cov_parts) . ')';
-		$lines[] = 'fit <- build_interprobe_linear(';
-		$lines[] = '  y = ' . r_quote($y) . ',';
-		$lines[] = '  x = ' . r_quote($x) . ',';
-		$lines[] = '  z = ' . r_quote($z) . ',';
-		$lines[] = '  data = data.imported,';
-		$lines[] = '  covs = covs';
 		$lines[] = ')';
 		$lines[] = 'interprobe(';
 		$lines[] = '  model = fit,';
@@ -303,14 +299,34 @@ if (empty($covariates) && $model_type === 'gam') {
 		save.as="$png_path"
 	)
 RCODE;
-} elseif (empty($covariates) && $model_type === 'linear') {
+} elseif ($model_type === 'linear') {
+	if (empty($covariates)) {
+		$cov_r = 'character(0)';
+	} else {
+		$cov_r_parts = array();
+		foreach ($covariates as $cov) {
+			$cov_r_parts[] = '"'.addslashes($cov).'"';
+		}
+		$cov_r = 'c('.implode(', ', $cov_r_parts).')';
+	}
+
 	$interprobe_call = <<<RCODE
+	source("$build_gam_r")
+	covs <- $cov_r
+	data.imported <- prepare_interprobe_linear_data(data.imported, "$y_r", "$x_r", "$z_r", covs)
+	fit <- build_interprobe_linear(
+		y="$y_r",
+		x="$x_r",
+		z="$z_r",
+		data=data.imported,
+		covs=covs
+	)
 	interprobe(
+		model=fit,
 		x="$x_r",
 		z="$z_r",
 		y="$y_r",
 		data=data.imported,
-		model=linear,
 		save.as="$png_path"
 	)
 RCODE;
@@ -338,32 +354,6 @@ RCODE;
 		data=data.imported,
 		covs=covs,
 		cov_linear=cov_linear
-	)
-	interprobe(
-		model=fit,
-		x="$x_r",
-		z="$z_r",
-		y="$y_r",
-		data=data.imported,
-		save.as="$png_path"
-	)
-RCODE;
-} else {
-	$cov_r_parts = array();
-	foreach ($covariates as $cov) {
-		$cov_r_parts[] = '"'.addslashes($cov).'"';
-	}
-	$cov_r = 'c('.implode(', ', $cov_r_parts).')';
-
-	$interprobe_call = <<<RCODE
-	source("$build_gam_r")
-	covs <- $cov_r
-	fit <- build_interprobe_linear(
-		y="$y_r",
-		x="$x_r",
-		z="$z_r",
-		data=data.imported,
-		covs=covs
 	)
 	interprobe(
 		model=fit,

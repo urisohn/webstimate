@@ -26,7 +26,22 @@ build_interprobe_gam <- function(y, x, z, data, covs = character(), cov_linear =
 	mgcv::gam(fo, data = data, method = "REML")
 }
 
+prepare_interprobe_linear_data <- function(data, y, x, z, covs = character()) {
+	vars <- unique(c(y, x, z, covs))
+	for (v in vars) {
+		col <- data[[v]]
+		if (is.factor(col) || is.character(col)) {
+			num <- suppressWarnings(as.numeric(as.character(col)))
+			if (!any(is.na(num))) {
+				data[[v]] <- num
+			}
+		}
+	}
+	data
+}
+
 build_interprobe_linear <- function(y, x, z, data, covs = character()) {
+	data <- prepare_interprobe_linear_data(data, y, x, z, covs)
 	rhs <- paste(x, "*", z)
 	if (length(covs) > 0) {
 		rhs <- paste(rhs, paste(covs, collapse = " + "), sep = " + ")
