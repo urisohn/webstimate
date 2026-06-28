@@ -6,9 +6,12 @@ error_reporting(E_ALL);
   <title>Johnson-Neyman 2.0: Online App for Nonlinear Probing of Interactions</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <style>
-.jumbotron h1 { font-size: 26px; line-height: 1.35; font-weight: 600; }
-.configure-panel { max-width: 520px; margin: 0 auto; }
-.var-table { width: 100%; }
+body { color: #333; }
+.jumbotron { padding-top: 28px; padding-bottom: 28px; margin-bottom: 0; background: #f7f9fc; border-bottom: 1px solid #e3e8ef; }
+.jumbotron h1 { font-size: 26px; line-height: 1.35; font-weight: 600; letter-spacing: -0.3px; }
+.configure-panel { max-width: 520px; margin: 0 auto; padding: 28px 15px 32px; }
+.configure-intro { font-size: 16px; line-height: 1.5; margin: 0 0 18px; }
+.var-table { width: 100%; margin-bottom: 0; }
 .var-table th, .var-table td { padding: 6px 8px; text-align: center; vertical-align: middle; }
 .var-table th { white-space: normal; line-height: 1.25; font-size: 13px; }
 .var-table td:first-child { text-align: left; white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
@@ -22,13 +25,25 @@ error_reporting(E_ALL);
 	margin-bottom: 8px;
 	flex-wrap: wrap;
 }
-.model-toggle-wrap {
+.model-toggle-box {
 	display: flex;
 	align-items: center;
-	gap: 8px;
+	gap: 10px;
 	font-size: 13px;
-	color: #555;
+	color: #444;
+	padding: 8px 14px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	background: #fafbfc;
 }
+.model-toggle-box .toggle-label { font-weight: 600; color: #333; white-space: nowrap; }
+.model-toggle-box .toggle-option {
+	white-space: nowrap;
+	color: #999;
+	font-weight: 400;
+	transition: color 0.2s, font-weight 0.2s;
+}
+.model-toggle-box .toggle-option.active { color: #337ab7; font-weight: 600; }
 .mac-toggle {
 	position: relative;
 	display: inline-block;
@@ -71,10 +86,17 @@ error_reporting(E_ALL);
 .mac-toggle input:checked + .mac-slider:before {
 	transform: translateX(18px);
 }
+.mac-toggle input:focus-visible + .mac-slider {
+	box-shadow: 0 0 0 2px #fff, 0 0 0 4px #337ab7;
+}
 .var-table .cov-col { display: none; }
+.configure-actions { margin-top: 16px; }
+.configure-actions .btn-primary { min-width: 120px; }
 .var-table.cov-visible .cov-col { display: table-cell; }
 #varTable.model-linear .cov-linear-col { display: none !important; }
 </style>
+</head>
+<body>
 <?
 
 $file     = $_SESSION['file'];
@@ -125,18 +147,19 @@ $show_covariates = count($variables) > 3;
 
 <div class="container">
 <div class="configure-panel">
-<font size='4'>Select one variable for each role, then click Run.<BR><BR></font>
+<p class="configure-intro">Select one variable for each role, then click Run.</p>
 
 <form method="post" action="run.php" id="configureForm">
 <input type="hidden" name="model_type" id="modelType" value="gam">
 <div class="var-table-toolbar">
-	<div class="model-toggle-wrap">
-		<span>regression</span>
-		<label class="mac-toggle">
-			<input type="checkbox" id="modelGamToggle" checked>
+	<div class="model-toggle-box">
+		<span class="toggle-label">Probe interaction with:</span>
+		<span class="toggle-option" id="toggleRegression">Regression</span>
+		<label class="mac-toggle" title="Switch between regression and GAM">
+			<input type="checkbox" id="modelGamToggle" checked aria-label="Use GAM instead of regression">
 			<span class="mac-slider"></span>
 		</label>
-		<span>GAM</span>
+		<span class="toggle-option active" id="toggleGam">GAM</span>
 	</div>
 <? if ($show_covariates) { ?>
 	<button type="button" id="addCovariatesBtn" class="btn btn-default btn-sm">Add covariates</button>
@@ -170,8 +193,9 @@ foreach ($variables as $var) {
 }
 ?>
 </table>
-<BR>
-<input type="submit" name="submit" value="Run" class="btn btn-primary">
+<div class="configure-actions">
+<input type="submit" name="submit" value="Run" class="btn btn-primary btn-lg">
+</div>
 </form>
 </div>
 </div>
@@ -181,6 +205,9 @@ foreach ($variables as $var) {
 	var varTable = document.getElementById("varTable");
 	var modelType = document.getElementById("modelType");
 	var modelGamToggle = document.getElementById("modelGamToggle");
+
+	var toggleRegression = document.getElementById("toggleRegression");
+	var toggleGam = document.getElementById("toggleGam");
 
 	function syncModelType() {
 		if (modelGamToggle.checked) {
@@ -193,6 +220,8 @@ foreach ($variables as $var) {
 				input.checked = false;
 			});
 		}
+		toggleRegression.classList.toggle("active", !modelGamToggle.checked);
+		toggleGam.classList.toggle("active", modelGamToggle.checked);
 		if (typeof updateAllRowCovStates === "function") {
 			updateAllRowCovStates();
 		}
@@ -270,3 +299,4 @@ foreach ($variables as $var) {
 <? } ?>
 })();
 </script>
+</body>
