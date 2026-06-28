@@ -91,6 +91,15 @@ $dir_data = $_SESSION['dir_data'];
 $time     = $_SESSION['time'];
 $extension= $_SESSION['extension'];
 
+$original_file = isset($_SESSION['original_file']) ? $_SESSION['original_file'] : $file;
+$origname_file = $dir_data . $time . '.origname';
+if (file_exists($origname_file)) {
+	$stored_name = trim(file_get_contents($origname_file));
+	if ($stored_name !== '') {
+		$original_file = $stored_name;
+	}
+}
+
 if (!file_exists($dir_data.$file)) {
 	die("Sorry, the file was not uploaded. Please try again.");
 }
@@ -146,6 +155,7 @@ $show_covariates = count($variables) > 3;
 
 <form method="post" action="run.php" id="configureForm">
 <input type="hidden" name="model_type" id="modelType" value="gam">
+<input type="hidden" name="original_file" value="<? echo htmlspecialchars($original_file, ENT_QUOTES, 'UTF-8'); ?>">
 <table class="table table-striped var-table" id="varTable">
 	<tr>
 		<th>Variable</th>

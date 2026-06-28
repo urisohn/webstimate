@@ -34,14 +34,10 @@ error_reporting(E_ALL);
       color: #444;
     }
     .output-panel-r-code h3 {
-      margin: 0 0 6px;
+      margin: 0 0 12px;
       font-size: 14px;
       font-weight: 600;
       color: #333;
-    }
-    .output-panel-r-code .output-panel-intro {
-      margin: 0 0 12px;
-      color: #666;
     }
     .output-panel-error {
       font-size: 16px;
@@ -75,12 +71,30 @@ error_reporting(E_ALL);
 <?
 
 $file      = $_SESSION['file'];
-$original_file = isset($_SESSION['original_file']) ? $_SESSION['original_file'] : $file;
 $dir       = $_SESSION['dir'];
 $dir_data  = $_SESSION['dir_data'];
 $time      = $_SESSION['time'];
 $extension = $_SESSION['extension'];
 $variables = isset($_SESSION['variables']) ? $_SESSION['variables'] : array();
+
+function resolve_original_filename($file, $time, $dir_data) {
+	if (isset($_POST['original_file']) && $_POST['original_file'] !== '') {
+		return basename($_POST['original_file']);
+	}
+	if (isset($_SESSION['original_file']) && $_SESSION['original_file'] !== '') {
+		return basename($_SESSION['original_file']);
+	}
+	$origname_file = $dir_data . $time . '.origname';
+	if (file_exists($origname_file)) {
+		$stored_name = trim(file_get_contents($origname_file));
+		if ($stored_name !== '') {
+			return basename($stored_name);
+		}
+	}
+	return basename($file);
+}
+
+$original_file = resolve_original_filename($file, $time, $dir_data);
 
 $y = isset($_POST['y']) ? $_POST['y'] : '';
 $x = isset($_POST['x']) ? $_POST['x'] : '';
@@ -120,14 +134,24 @@ function r_quote($name) {
 	return '"' . str_replace('"', '\\"', $name) . '"';
 }
 
+function r_groundhog_lines($pkgs) {
+	$pkg_list = implode("', '", $pkgs);
+	return array(
+		"library('groundhog')",
+		"pkgs=c('" . $pkg_list . "')",
+		"groundhog.library(pkgs,'2026-06-27')",
+	);
+}
+
 function r_commands_text($y, $x, $z, $data_filename, $model_type, $covariates, $cov_linear) {
 	$save_as = 'interprobe_plot.png';
-	$lines = array(
-		'library(rio)',
-		'library(statuser)',
-		'data.imported <- import(' . r_quote($data_filename) . ')',
-		''
-	);
+	$pkgs = array('rio', 'statuser');
+	if ($model_type === 'gam' && !empty($covariates)) {
+		$pkgs[] = 'mgcv';
+	}
+	$lines = r_groundhog_lines($pkgs);
+	$lines[] = 'data.imported <- import(' . r_quote($data_filename) . ')';
+	$lines[] = '';
 
 	if (empty($covariates) && $model_type === 'gam') {
 		$lines[] = 'interprobe(';
@@ -148,7 +172,6 @@ function r_commands_text($y, $x, $z, $data_filename, $model_type, $covariates, $
 		$lines[] = ')';
 	} elseif ($model_type === 'gam') {
 		$lines[] = 'source("build_gam.r")';
-		$lines[] = 'library(mgcv)';
 		$cov_parts = array();
 		foreach ($covariates as $cov) {
 			$cov_parts[] = r_quote($cov);
@@ -205,7 +228,6 @@ function r_commands_text($y, $x, $z, $data_filename, $model_type, $covariates, $
 function r_commands_panel_html($r_commands_text) {
 	$body =
 		'<h3>Reproducible R Code Produced</h3>' .
-		'<p class="output-panel-intro">We show the R code that was run (again hiding the paths). Use the file name you entered, not the temp name.</p>' .
 		'<pre class="output-panel-pre">' . htmlspecialchars($r_commands_text, ENT_QUOTES, 'UTF-8') . '</pre>';
 	return r_output_panel_html($body, 'output-panel-r-code');
 }

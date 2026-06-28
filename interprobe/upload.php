@@ -61,6 +61,7 @@ if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target)) {
 	$_SESSION['original_file'] = $user_file;
 	$_SESSION['time'] = $time;
 	$_SESSION['extension'] = $file_type;
+	file_put_contents($dir_data . $time . '.origname', $user_file);
 	echo ('<meta http-equiv="refresh" content="0; url=configure.php">');
 } else {
 	die("Sorry, there was an error saving your file to: $target");
