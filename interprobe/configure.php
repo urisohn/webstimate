@@ -13,6 +13,9 @@ error_reporting(E_ALL);
 .var-table td:first-child { text-align: left; white-space: nowrap; }
 .var-table label { display: block; margin: 0; cursor: pointer; font-weight: normal; }
 .var-table .cov-linear-label { font-size: 12px; color: #666; }
+.var-table-toolbar { text-align: right; margin-bottom: 8px; }
+.var-table .cov-col { display: none; }
+.var-table.cov-visible .cov-col { display: table-cell; }
 </style>
 <?
 
@@ -55,6 +58,7 @@ while (($row = fgetcsv($f)) !== false) {
 }
 fclose($f);
 $_SESSION['variables'] = $variables;
+$show_covariates = count($variables) > 3;
 ?>
 
 <div class="jumbotron text-center">
@@ -62,17 +66,24 @@ $_SESSION['variables'] = $variables;
 </div>
 
 <div class="container">
-<font size='4'>Select one variable for each role. Optionally mark additional variables as covariates (smooth by default, or linear). Then click Run.<BR><BR></font>
+<font size='4'>Select one variable for each role, then click Run.<BR><BR></font>
 
 <form method="post" action="run.php" id="configureForm">
-<table class="table table-striped var-table">
+<? if ($show_covariates) { ?>
+<div class="var-table-toolbar">
+	<button type="button" id="addCovariatesBtn" class="btn btn-default btn-sm">Add covariates</button>
+</div>
+<? } ?>
+<table class="table table-striped var-table" id="varTable">
 	<tr>
 		<th>Variable</th>
 		<th>Dependent<br>(y)</th>
 		<th>Focal<br>predictor<br>(x)</th>
 		<th>Moderator<br>(z)</th>
-		<th>Covariate</th>
-		<th>Linear</th>
+<? if ($show_covariates) { ?>
+		<th class="cov-col">Covariate</th>
+		<th class="cov-col">Linear</th>
+<? } ?>
 	</tr>
 <?
 foreach ($variables as $var) {
@@ -83,8 +94,10 @@ foreach ($variables as $var) {
 	echo "<td><label><input type='radio' name='y' value='$safe' class='role-select'></label></td>";
 	echo "<td><label><input type='radio' name='x' value='$safe' class='role-select'></label></td>";
 	echo "<td><label><input type='radio' name='z' value='$safe' class='role-select'></label></td>";
-	echo "<td><label><input type='checkbox' name='cov[]' value='$safe' class='cov-select'></label></td>";
-	echo "<td><label class='cov-linear-label'><input type='checkbox' name='cov_linear[]' value='$safe' class='cov-linear' disabled> linear</label></td>";
+	if ($show_covariates) {
+		echo "<td class='cov-col'><label><input type='checkbox' name='cov[]' value='$safe' class='cov-select'></label></td>";
+		echo "<td class='cov-col'><label class='cov-linear-label'><input type='checkbox' name='cov_linear[]' value='$safe' class='cov-linear' disabled> linear</label></td>";
+	}
 	echo "</tr>\n";
 }
 ?>
@@ -94,20 +107,38 @@ foreach ($variables as $var) {
 </form>
 </div>
 
+<? if ($show_covariates) { ?>
 <script>
 (function () {
 	function rowForInput(input) {
 		return input.closest("tr");
 	}
 
-	function clearCovOnRow(row) {
+	function roleSelectedOnRow(row) {
+		return row.querySelector(".role-select:checked") !== null;
+	}
+
+	function updateRowCovState(row) {
 		var cov = row.querySelector(".cov-select");
 		var linear = row.querySelector(".cov-linear");
-		if (cov) cov.checked = false;
-		if (linear) {
-			linear.checked = false;
-			linear.disabled = true;
+		if (!cov) return;
+		if (roleSelectedOnRow(row)) {
+			cov.checked = false;
+			cov.disabled = true;
+			if (linear) {
+				linear.checked = false;
+				linear.disabled = true;
+			}
+		} else {
+			cov.disabled = false;
+			if (linear) {
+				linear.disabled = !cov.checked;
+			}
 		}
+	}
+
+	function updateAllRowCovStates() {
+		document.querySelectorAll(".var-row").forEach(updateRowCovState);
 	}
 
 	function clearRolesForVar(varName) {
@@ -116,18 +147,11 @@ foreach ($variables as $var) {
 				input.checked = false;
 			}
 		});
-	}
-
-	function roleSelectedOnRow(row) {
-		return row.querySelector(".role-select:checked") !== null;
+		updateAllRowCovStates();
 	}
 
 	document.querySelectorAll(".role-select").forEach(function (input) {
-		input.addEventListener("change", function () {
-			if (input.checked) {
-				clearCovOnRow(rowForInput(input));
-			}
-		});
+		input.addEventListener("change", updateAllRowCovStates);
 	});
 
 	document.querySelectorAll(".cov-select").forEach(function (input) {
@@ -136,14 +160,21 @@ foreach ($variables as $var) {
 			var linear = row.querySelector(".cov-linear");
 			if (input.checked) {
 				clearRolesForVar(input.value);
-				if (linear) linear.disabled = false;
-			} else {
-				if (linear) {
-					linear.checked = false;
-					linear.disabled = true;
-				}
+			} else if (linear) {
+				linear.checked = false;
+				linear.disabled = true;
 			}
+			updateRowCovState(row);
 		});
 	});
+
+	document.getElementById("addCovariatesBtn").addEventListener("click", function () {
+		document.getElementById("varTable").classList.add("cov-visible");
+		this.style.display = "none";
+		updateAllRowCovStates();
+	});
+
+	updateAllRowCovStates();
 })();
 </script>
+<? } ?>
