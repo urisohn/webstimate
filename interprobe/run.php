@@ -34,12 +34,6 @@ error_reporting(E_ALL);
       line-height: 1.55;
       color: #444;
     }
-    .output-panel-r-code h3 {
-      margin: 0 0 12px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #333;
-    }
     .output-panel-error {
       font-size: 16px;
       line-height: 1.55;
@@ -217,9 +211,7 @@ function r_commands_text($y, $x, $z, $model_type, $covariates, $cov_linear) {
 }
 
 function r_commands_panel_html($r_commands_text) {
-	$body =
-		'<h3>Reproducible R Code Produced</h3>' .
-		'<pre class="output-panel-pre">' . htmlspecialchars($r_commands_text, ENT_QUOTES, 'UTF-8') . '</pre>';
+	$body = '<pre class="output-panel-pre">' . htmlspecialchars($r_commands_text, ENT_QUOTES, 'UTF-8') . '</pre>';
 	return r_output_panel_html($body, 'output-panel-r-code');
 }
 
@@ -452,6 +444,8 @@ if (file_exists($statuser_version_file)) {
 
 	<h2><b>Output</b></h2>
 	<?echo interprobe_output_panel_html($console_text, $statuser_version_label); ?>
+
+	<h2><b>R Code behind results</b></h2>
 	<?echo r_commands_panel_html($r_commands_text); ?>
 </div>
 
