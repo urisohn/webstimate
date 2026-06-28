@@ -123,15 +123,21 @@ if (!file_exists($vars_file)) {
 }
 
 $variables = array();
+$var_nux = array();
 $f = fopen($vars_file, "r");
 $header = fgetcsv($f);
+$nux_col = is_array($header) ? array_search('nux', $header, true) : false;
 while (($row = fgetcsv($f)) !== false) {
 	if (isset($row[0]) && $row[0] !== "") {
 		$variables[] = $row[0];
+		if ($nux_col !== false && isset($row[$nux_col]) && $row[$nux_col] !== "") {
+			$var_nux[$row[0]] = (int)$row[$nux_col];
+		}
 	}
 }
 fclose($f);
 $_SESSION['variables'] = $variables;
+$_SESSION['var_nux'] = $var_nux;
 $show_covariates = count($variables) > 3;
 ?>
 

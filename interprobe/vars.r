@@ -7,5 +7,12 @@
 		file1=paste0(time1, ".", extension1)
 		a=import(file1)
 		vars_file=paste0("vars_", file1)
-		write.csv(data.frame(variable=names(a)), vars_file, row.names=FALSE)
+		write.csv(
+			data.frame(
+				variable=names(a),
+				nux=sapply(a, function(v) length(unique(v)))
+			),
+			vars_file,
+			row.names=FALSE
+		)
 	}

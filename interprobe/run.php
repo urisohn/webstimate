@@ -128,7 +128,81 @@ function r_groundhog_lines($pkgs) {
 	);
 }
 
-function r_commands_text($y, $x, $z, $model_type, $covariates, $cov_linear) {
+function r_lm_formula($y, $x, $z, $covariates) {
+	$rhs = $x . ' * ' . $z;
+	if (!empty($covariates)) {
+		$rhs .= ' + ' . implode(' + ', $covariates);
+	}
+	return $y . ' ~ ' . $rhs;
+}
+
+function r_gam_formula($y, $x, $z, $covariates, $cov_linear, $nux_x) {
+	if ($nux_x === 2) {
+		$base = $x . ' + s(' . $z . ', k = 10) + ti(' . $z . ', by = ' . $x . ', k = 10)';
+	} else {
+		$base = 's(' . $x . ', k = 10) + s(' . $z . ', k = 10) + ti(' . $x . ', ' . $z . ', k = 10)';
+	}
+	$cov_terms = array();
+	foreach ($covariates as $cov) {
+		if (in_array($cov, $cov_linear, true)) {
+			$cov_terms[] = $cov;
+		} else {
+			$cov_terms[] = 's(' . $cov . ', k = 10)';
+		}
+	}
+	if (!empty($cov_terms)) {
+		$base .= ' + ' . implode(' + ', $cov_terms);
+	}
+	return $y . ' ~ ' . $base;
+}
+
+function interprobe_direct_call_lines($x, $z, $y, $save_as, $model_type) {
+	$lines = array(
+		'interprobe(',
+		'  x = ' . r_quote($x) . ',',
+		'  z = ' . r_quote($z) . ',',
+		'  y = ' . r_quote($y) . ',',
+		'  data = data.imported,',
+	);
+	if ($model_type === 'linear') {
+		$lines[] = '  model = linear,';
+	}
+	$lines[] = '  save.as = ' . r_quote($save_as);
+	$lines[] = ')';
+	return $lines;
+}
+
+function interprobe_fit_call_lines($x, $z, $save_as, $fit_name) {
+	return array(
+		'interprobe(',
+		'  model = ' . $fit_name . ',',
+		'  x = ' . r_quote($x) . ',',
+		'  z = ' . r_quote($z) . ',',
+		'  save.as = ' . r_quote($save_as),
+		')',
+	);
+}
+
+function interprobe_analysis_lines($y, $x, $z, $model_type, $covariates, $cov_linear, $save_as, $nux_x) {
+	if (empty($covariates)) {
+		return interprobe_direct_call_lines($x, $z, $y, $save_as, $model_type);
+	}
+
+	if ($model_type === 'linear') {
+		$formula = r_lm_formula($y, $x, $z, $covariates);
+		$lines = array('m1 <- lm(' . $formula . ', data = data.imported)');
+		return array_merge($lines, interprobe_fit_call_lines($x, $z, $save_as, 'm1'));
+	}
+
+	$formula = r_gam_formula($y, $x, $z, $covariates, $cov_linear, $nux_x);
+	$lines = array(
+		'library(mgcv)',
+		'fit <- gam(' . $formula . ', data = data.imported, method = "REML")',
+	);
+	return array_merge($lines, interprobe_fit_call_lines($x, $z, $save_as, 'fit'));
+}
+
+function r_commands_text($y, $x, $z, $model_type, $covariates, $cov_linear, $nux_x) {
 	$save_as = 'interprobe_plot.png';
 	$pkgs = array('rio', 'statuser');
 	if ($model_type === 'gam' && !empty($covariates)) {
@@ -137,73 +211,9 @@ function r_commands_text($y, $x, $z, $model_type, $covariates, $cov_linear) {
 	$lines = r_groundhog_lines($pkgs);
 	$lines[] = 'data.imported <- import("")';
 	$lines[] = '';
-
-	if (empty($covariates) && $model_type === 'gam') {
-		$lines[] = 'interprobe(';
-		$lines[] = '  x = ' . r_quote($x) . ',';
-		$lines[] = '  z = ' . r_quote($z) . ',';
-		$lines[] = '  y = ' . r_quote($y) . ',';
-		$lines[] = '  data = data.imported,';
-		$lines[] = '  save.as = ' . r_quote($save_as);
-		$lines[] = ')';
-	} elseif ($model_type === 'linear') {
-		$lines[] = 'source("build_gam.r")';
-		if (empty($covariates)) {
-			$lines[] = 'covs <- character(0)';
-		} else {
-			$cov_parts = array();
-			foreach ($covariates as $cov) {
-				$cov_parts[] = r_quote($cov);
-			}
-			$lines[] = 'covs <- c(' . implode(', ', $cov_parts) . ')';
-		}
-		$lines[] = 'data.imported <- prepare_interprobe_linear_data(data.imported, ' . r_quote($y) . ', ' . r_quote($x) . ', ' . r_quote($z) . ', covs)';
-		$lines[] = 'fit <- build_interprobe_linear(';
-		$lines[] = '  y = ' . r_quote($y) . ',';
-		$lines[] = '  x = ' . r_quote($x) . ',';
-		$lines[] = '  z = ' . r_quote($z) . ',';
-		$lines[] = '  data = data.imported,';
-		$lines[] = '  covs = covs';
-		$lines[] = ')';
-		$lines[] = 'interprobe(';
-		$lines[] = '  model = fit,';
-		$lines[] = '  x = ' . r_quote($x) . ',';
-		$lines[] = '  z = ' . r_quote($z) . ',';
-		$lines[] = '  y = ' . r_quote($y) . ',';
-		$lines[] = '  data = data.imported,';
-		$lines[] = '  save.as = ' . r_quote($save_as);
-		$lines[] = ')';
-	} elseif ($model_type === 'gam') {
-		$lines[] = 'source("build_gam.r")';
-		$cov_parts = array();
-		foreach ($covariates as $cov) {
-			$cov_parts[] = r_quote($cov);
-		}
-		$lines[] = 'covs <- c(' . implode(', ', $cov_parts) . ')';
-		$linear_parts = array();
-		foreach ($covariates as $cov) {
-			$linear_parts[] = in_array($cov, $cov_linear, true) ? 'TRUE' : 'FALSE';
-		}
-		$lines[] = 'cov_linear <- c(' . implode(', ', $linear_parts) . ')';
-		$lines[] = 'fit <- build_interprobe_gam(';
-		$lines[] = '  y = ' . r_quote($y) . ',';
-		$lines[] = '  x = ' . r_quote($x) . ',';
-		$lines[] = '  z = ' . r_quote($z) . ',';
-		$lines[] = '  data = data.imported,';
-		$lines[] = '  covs = covs,';
-		$lines[] = '  cov_linear = cov_linear';
-		$lines[] = ')';
-		$lines[] = 'interprobe(';
-		$lines[] = '  model = fit,';
-		$lines[] = '  x = ' . r_quote($x) . ',';
-		$lines[] = '  z = ' . r_quote($z) . ',';
-		$lines[] = '  y = ' . r_quote($y) . ',';
-		$lines[] = '  data = data.imported,';
-		$lines[] = '  save.as = ' . r_quote($save_as);
-		$lines[] = ')';
-	}
-
-	return implode("\n", $lines);
+	return implode("\n", array_merge($lines, interprobe_analysis_lines(
+		$y, $x, $z, $model_type, $covariates, $cov_linear, $save_as, $nux_x
+	)));
 }
 
 function r_commands_panel_html($r_commands_text) {
@@ -276,9 +286,8 @@ if ($model_type === 'linear') {
 	}
 }
 
-$y_r = addslashes($y);
-$x_r = addslashes($x);
-$z_r = addslashes($z);
+$var_nux = isset($_SESSION['var_nux']) ? $_SESSION['var_nux'] : array();
+$nux_x = isset($var_nux[$x]) ? (int)$var_nux[$x] : null;
 
 $png_file = $time.".png";
 $console_file = $dir."console_".$time.".txt";
@@ -287,84 +296,11 @@ $data_path = $dir_data.$file;
 $png_path = $dir.$png_file;
 $rout_file = $dir.$time."_interprobe.Rout";
 $batch_script = $dir.$time."_interprobe";
-$build_gam_r = '/home/urisoh5/public_html/webstimate.org/interprobe/build_gam.r';
 
-if (empty($covariates) && $model_type === 'gam') {
-	$interprobe_call = <<<RCODE
-	interprobe(
-		x="$x_r",
-		z="$z_r",
-		y="$y_r",
-		data=data.imported,
-		save.as="$png_path"
-	)
-RCODE;
-} elseif ($model_type === 'linear') {
-	if (empty($covariates)) {
-		$cov_r = 'character(0)';
-	} else {
-		$cov_r_parts = array();
-		foreach ($covariates as $cov) {
-			$cov_r_parts[] = '"'.addslashes($cov).'"';
-		}
-		$cov_r = 'c('.implode(', ', $cov_r_parts).')';
-	}
-
-	$interprobe_call = <<<RCODE
-	source("$build_gam_r")
-	covs <- $cov_r
-	data.imported <- prepare_interprobe_linear_data(data.imported, "$y_r", "$x_r", "$z_r", covs)
-	fit <- build_interprobe_linear(
-		y="$y_r",
-		x="$x_r",
-		z="$z_r",
-		data=data.imported,
-		covs=covs
-	)
-	interprobe(
-		model=fit,
-		x="$x_r",
-		z="$z_r",
-		y="$y_r",
-		data=data.imported,
-		save.as="$png_path"
-	)
-RCODE;
-} elseif ($model_type === 'gam') {
-	$cov_r_parts = array();
-	foreach ($covariates as $cov) {
-		$cov_r_parts[] = '"'.addslashes($cov).'"';
-	}
-	$cov_linear_r_parts = array();
-	foreach ($covariates as $cov) {
-		$cov_linear_r_parts[] = in_array($cov, $cov_linear, true) ? 'TRUE' : 'FALSE';
-	}
-	$cov_r = 'c('.implode(', ', $cov_r_parts).')';
-	$cov_linear_r = 'c('.implode(', ', $cov_linear_r_parts).')';
-
-	$interprobe_call = <<<RCODE
-	source("$build_gam_r")
-	library(mgcv)
-	covs <- $cov_r
-	cov_linear <- $cov_linear_r
-	fit <- build_interprobe_gam(
-		y="$y_r",
-		x="$x_r",
-		z="$z_r",
-		data=data.imported,
-		covs=covs,
-		cov_linear=cov_linear
-	)
-	interprobe(
-		model=fit,
-		x="$x_r",
-		z="$z_r",
-		y="$y_r",
-		data=data.imported,
-		save.as="$png_path"
-	)
-RCODE;
-}
+$analysis_lines = interprobe_analysis_lines(
+	$y, $x, $z, $model_type, $covariates, $cov_linear, $png_path, $nux_x
+);
+$interprobe_call = "\t" . implode("\n\t", $analysis_lines);
 
 $rcode = <<<RCODE
 	.libPaths("/usr/local/R/library")
@@ -404,7 +340,7 @@ if (file_exists($console_file)) {
 	$console_text = file_get_contents($console_file);
 }
 $r_commands_text = r_commands_text(
-	$y, $x, $z, $model_type, $covariates, $cov_linear
+	$y, $x, $z, $model_type, $covariates, $cov_linear, $nux_x
 );
 $saved_upload_filename = interprobe_saved_upload_filename($dir_data, $dir, $file, $time);
 $r_commands_text = interprobe_inject_import_filename($r_commands_text, $saved_upload_filename);
