@@ -1,0 +1,8 @@
+# Run every 10 minutes. Install with:
+#   crontab -e
+# then paste the line below (adjust script path if needed).
+#
+# Make the script executable once:
+#   chmod +x /home/urisoh5/public_html/webstimate.org/scripts/cleanup_temp.sh
+
+*/10 * * * * /home/urisoh5/public_html/webstimate.org/scripts/cleanup_temp.sh
