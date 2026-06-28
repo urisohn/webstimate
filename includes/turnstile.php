@@ -27,15 +27,28 @@ function turnstile_site_key() {
 	return TURNSTILE_SITE_KEY;
 }
 
+function turnstile_error_page($message, $back_url = 'index.php') {
+	$msg = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
+	$back = htmlspecialchars($back_url, ENT_QUOTES, 'UTF-8');
+	die(
+		'<!DOCTYPE html><html><head>'.
+		'<meta charset="utf-8">'.
+		'<title>Security verification</title>'.
+		'<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">'.
+		'</head><body>'.
+		'<div class="container" style="max-width:560px;margin-top:48px">'.
+		'<div class="alert alert-danger"><strong>Security verification failed</strong><br>'.$msg.'</div>'.
+		'<a href="'.$back.'" class="btn btn-default">Back</a>'.
+		'</div></body></html>'
+	);
+}
+
 function verify_turnstile_or_die($back_url = 'index.php') {
 	turnstile_load_config();
 
 	$token = isset($_POST['cf-turnstile-response']) ? trim($_POST['cf-turnstile-response']) : '';
 	if ($token === '') {
-		die(
-			'Verification required. Please go back and complete the security check. ' .
-			'<a href="' . htmlspecialchars($back_url, ENT_QUOTES, 'UTF-8') . '">Back</a>'
-		);
+		turnstile_error_page('Verification required. Please go back and complete the security check.', $back_url);
 	}
 
 	$post_fields = array(
@@ -68,17 +81,11 @@ function verify_turnstile_or_die($back_url = 'index.php') {
 	}
 
 	if ($response === false) {
-		die(
-			'Could not verify security check. Please try again. ' .
-			'<a href="' . htmlspecialchars($back_url, ENT_QUOTES, 'UTF-8') . '">Back</a>'
-		);
+		turnstile_error_page('Could not verify security check. Please try again.', $back_url);
 	}
 
 	$result = json_decode($response, true);
 	if (empty($result['success'])) {
-		die(
-			'Security verification failed. Please go back and try again. ' .
-			'<a href="' . htmlspecialchars($back_url, ENT_QUOTES, 'UTF-8') . '">Back</a>'
-		);
+		turnstile_error_page('Please go back and try again.', $back_url);
 	}
 }

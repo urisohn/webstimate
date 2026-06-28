@@ -25,3 +25,16 @@ build_interprobe_gam <- function(y, x, z, data, covs = character(), cov_linear =
 	fo <- as.formula(paste(y, "~", rhs))
 	mgcv::gam(fo, data = data, method = "REML")
 }
+
+build_interprobe_linear <- function(y, x, z, data, covs = character()) {
+	rhs <- paste(x, "*", z)
+	if (length(covs) > 0) {
+		rhs <- paste(rhs, paste(covs, collapse = " + "), sep = " + ")
+	}
+	fo <- as.formula(paste(y, "~", rhs))
+	if (requireNamespace("estimatr", quietly = TRUE)) {
+		statuser::lm2(fo, data = data)
+	} else {
+		stats::lm(fo, data = data)
+	}
+}

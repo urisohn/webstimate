@@ -7,15 +7,73 @@ error_reporting(E_ALL);
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <style>
 .jumbotron h1 { font-size: 26px; line-height: 1.35; font-weight: 600; }
-.var-table { width: auto; max-width: 100%; }
-.var-table th, .var-table td { padding: 6px 10px; text-align: center; vertical-align: middle; }
+.configure-panel { max-width: 520px; margin: 0 auto; }
+.var-table { width: 100%; }
+.var-table th, .var-table td { padding: 6px 8px; text-align: center; vertical-align: middle; }
 .var-table th { white-space: normal; line-height: 1.25; font-size: 13px; }
-.var-table td:first-child { text-align: left; white-space: nowrap; }
+.var-table td:first-child { text-align: left; white-space: nowrap; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
 .var-table label { display: block; margin: 0; cursor: pointer; font-weight: normal; }
 .var-table .cov-linear-label { font-size: 12px; color: #666; }
-.var-table-toolbar { text-align: right; margin-bottom: 8px; }
+.var-table-toolbar {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 8px;
+	flex-wrap: wrap;
+}
+.model-toggle-wrap {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 13px;
+	color: #555;
+}
+.mac-toggle {
+	position: relative;
+	display: inline-block;
+	width: 44px;
+	height: 26px;
+	margin: 0;
+	vertical-align: middle;
+}
+.mac-toggle input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+.mac-slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	border-radius: 26px;
+	transition: background-color 0.2s;
+}
+.mac-slider:before {
+	position: absolute;
+	content: "";
+	height: 22px;
+	width: 22px;
+	left: 2px;
+	bottom: 2px;
+	background-color: white;
+	border-radius: 50%;
+	transition: transform 0.2s;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+}
+.mac-toggle input:checked + .mac-slider {
+	background-color: #34c759;
+}
+.mac-toggle input:checked + .mac-slider:before {
+	transform: translateX(18px);
+}
 .var-table .cov-col { display: none; }
 .var-table.cov-visible .cov-col { display: table-cell; }
+#varTable.model-linear .cov-linear-col { display: none !important; }
 </style>
 <?
 
@@ -66,14 +124,24 @@ $show_covariates = count($variables) > 3;
 </div>
 
 <div class="container">
+<div class="configure-panel">
 <font size='4'>Select one variable for each role, then click Run.<BR><BR></font>
 
 <form method="post" action="run.php" id="configureForm">
-<? if ($show_covariates) { ?>
+<input type="hidden" name="model_type" id="modelType" value="gam">
 <div class="var-table-toolbar">
+	<div class="model-toggle-wrap">
+		<span>regression</span>
+		<label class="mac-toggle">
+			<input type="checkbox" id="modelGamToggle" checked>
+			<span class="mac-slider"></span>
+		</label>
+		<span>GAM</span>
+	</div>
+<? if ($show_covariates) { ?>
 	<button type="button" id="addCovariatesBtn" class="btn btn-default btn-sm">Add covariates</button>
-</div>
 <? } ?>
+</div>
 <table class="table table-striped var-table" id="varTable">
 	<tr>
 		<th>Variable</th>
@@ -82,7 +150,7 @@ $show_covariates = count($variables) > 3;
 		<th>Moderator<br>(z)</th>
 <? if ($show_covariates) { ?>
 		<th class="cov-col">Covariate</th>
-		<th class="cov-col">Linear</th>
+		<th class="cov-col cov-linear-col">Linear</th>
 <? } ?>
 	</tr>
 <?
@@ -96,7 +164,7 @@ foreach ($variables as $var) {
 	echo "<td><label><input type='radio' name='z' value='$safe' class='role-select'></label></td>";
 	if ($show_covariates) {
 		echo "<td class='cov-col'><label><input type='checkbox' name='cov[]' value='$safe' class='cov-select'></label></td>";
-		echo "<td class='cov-col'><label class='cov-linear-label'><input type='checkbox' name='cov_linear[]' value='$safe' class='cov-linear' disabled> linear</label></td>";
+		echo "<td class='cov-col cov-linear-col'><label class='cov-linear-label'><input type='checkbox' name='cov_linear[]' value='$safe' class='cov-linear' disabled> linear</label></td>";
 	}
 	echo "</tr>\n";
 }
@@ -106,10 +174,34 @@ foreach ($variables as $var) {
 <input type="submit" name="submit" value="Run" class="btn btn-primary">
 </form>
 </div>
+</div>
 
-<? if ($show_covariates) { ?>
 <script>
 (function () {
+	var varTable = document.getElementById("varTable");
+	var modelType = document.getElementById("modelType");
+	var modelGamToggle = document.getElementById("modelGamToggle");
+
+	function syncModelType() {
+		if (modelGamToggle.checked) {
+			modelType.value = "gam";
+			varTable.classList.remove("model-linear");
+		} else {
+			modelType.value = "linear";
+			varTable.classList.add("model-linear");
+			document.querySelectorAll(".cov-linear").forEach(function (input) {
+				input.checked = false;
+			});
+		}
+		if (typeof updateAllRowCovStates === "function") {
+			updateAllRowCovStates();
+		}
+	}
+
+	modelGamToggle.addEventListener("change", syncModelType);
+	syncModelType();
+
+<? if ($show_covariates) { ?>
 	function rowForInput(input) {
 		return input.closest("tr");
 	}
@@ -132,14 +224,14 @@ foreach ($variables as $var) {
 		} else {
 			cov.disabled = false;
 			if (linear) {
-				linear.disabled = !cov.checked;
+				linear.disabled = !cov.checked || modelType.value === "linear";
 			}
 		}
 	}
 
-	function updateAllRowCovStates() {
+	window.updateAllRowCovStates = function () {
 		document.querySelectorAll(".var-row").forEach(updateRowCovState);
-	}
+	};
 
 	function clearRolesForVar(varName) {
 		document.querySelectorAll(".role-select").forEach(function (input) {
@@ -169,12 +261,12 @@ foreach ($variables as $var) {
 	});
 
 	document.getElementById("addCovariatesBtn").addEventListener("click", function () {
-		document.getElementById("varTable").classList.add("cov-visible");
+		varTable.classList.add("cov-visible");
 		this.style.display = "none";
 		updateAllRowCovStates();
 	});
 
 	updateAllRowCovStates();
+<? } ?>
 })();
 </script>
-<? } ?>
