@@ -134,14 +134,14 @@ function r_groundhog_lines($pkgs) {
 	);
 }
 
-function r_commands_text($y, $x, $z, $data_filename, $model_type, $covariates, $cov_linear) {
+function r_commands_text($y, $x, $z, $model_type, $covariates, $cov_linear) {
 	$save_as = 'interprobe_plot.png';
 	$pkgs = array('rio', 'statuser');
 	if ($model_type === 'gam' && !empty($covariates)) {
 		$pkgs[] = 'mgcv';
 	}
 	$lines = r_groundhog_lines($pkgs);
-	$lines[] = 'data.imported <- import(' . r_quote($data_filename) . ')';
+	$lines[] = 'data.imported <- import("")';
 	$lines[] = '';
 
 	if (empty($covariates) && $model_type === 'gam') {
@@ -422,8 +422,10 @@ if (file_exists($console_file)) {
 	$console_text = file_get_contents($console_file);
 }
 $r_commands_text = r_commands_text(
-	$y, $x, $z, $original_file, $model_type, $covariates, $cov_linear
+	$y, $x, $z, $model_type, $covariates, $cov_linear
 );
+$saved_upload_filename = interprobe_saved_upload_filename($dir_data, $dir, $file, $time);
+$r_commands_text = interprobe_inject_import_filename($r_commands_text, $saved_upload_filename);
 
 $statuser_version_label = "statuser";
 if (file_exists($statuser_version_file)) {

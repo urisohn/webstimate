@@ -79,6 +79,44 @@ function interprobe_get_original_filename($dir_data, $dir, $file, $time, $post_o
 	return interprobe_pick_original_filename($file);
 }
 
+function interprobe_saved_upload_filename($dir_data, $dir, $file, $time) {
+	if (!empty($_SESSION['user_upload_filename'])) {
+		return basename($_SESSION['user_upload_filename']);
+	}
+	if (!empty($_POST['original_file'])) {
+		$name = basename($_POST['original_file']);
+		if ($name !== '' && !interprobe_looks_like_temp_filename($name)) {
+			return $name;
+		}
+	}
+	if (!empty($_SESSION['original_file'])) {
+		$name = basename($_SESSION['original_file']);
+		if ($name !== '' && !interprobe_looks_like_temp_filename($name)) {
+			return $name;
+		}
+	}
+	foreach (interprobe_origname_paths($dir_data, $dir, $file, $time) as $path) {
+		$stored = interprobe_read_origname_file($path);
+		if ($stored !== '') {
+			return basename($stored);
+		}
+	}
+	return '';
+}
+
+function interprobe_inject_import_filename($r_code, $filename) {
+	if ($filename === '') {
+		return $r_code;
+	}
+	$quoted = '"' . str_replace(array('\\', '"'), array('\\\\', '\\"'), $filename) . '"';
+	return preg_replace(
+		'/import\(\s*["\']\s*["\']\s*\)/',
+		'import(' . $quoted . ')',
+		$r_code,
+		1
+	);
+}
+
 // Backwards-compatible alias used by older calls.
 function interprobe_resolve_original_filename($dir_data, $file, $time, $post_original = null, $session_original = null) {
 	$dir = isset($_SESSION['dir']) ? $_SESSION['dir'] : '';
