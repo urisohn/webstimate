@@ -86,7 +86,11 @@ $x = isset($_POST['x']) ? $_POST['x'] : '';
 $z = isset($_POST['z']) ? $_POST['z'] : '';
 $covariates = isset($_POST['cov']) && is_array($_POST['cov']) ? $_POST['cov'] : array();
 $cov_linear = isset($_POST['cov_linear']) && is_array($_POST['cov_linear']) ? $_POST['cov_linear'] : array();
-$model_type = (isset($_POST['model_type']) && $_POST['model_type'] === 'linear') ? 'linear' : 'gam';
+$model_type = 'gam';
+if ((isset($_POST['model_type']) && $_POST['model_type'] === 'linear')
+	|| (isset($_POST['run_regression']) && $_POST['run_regression'] === '1')) {
+	$model_type = 'linear';
+}
 
 function valid_var_name($name) {
 	return preg_match('/^[A-Za-z][A-Za-z0-9._]*$/', $name);
@@ -170,7 +174,7 @@ function interprobe_direct_call_lines($x, $z, $y, $save_as, $model_type) {
 		'  data = data.imported,',
 	);
 	if ($model_type === 'linear') {
-		$lines[] = '  model = linear,';
+		$lines[] = '  model = "linear",';
 	}
 	$lines[] = '  save.as = ' . r_quote($save_as);
 	$lines[] = ')';

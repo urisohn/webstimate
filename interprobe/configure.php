@@ -188,7 +188,7 @@ foreach ($variables as $var) {
 <div class="configure-actions">
 <input type="submit" name="submit" value="Run" class="btn btn-primary btn-lg">
 <div class="regression-option">
-	<label><input type="checkbox" id="runRegressionInstead"> Run regression instead of GAM</label>
+	<label><input type="checkbox" id="runRegressionInstead" name="run_regression" value="1"> Run regression instead of GAM</label>
 	<button type="button" class="regression-info-btn" id="regressionInfoBtn" title="Click for info" aria-label="Click for info">?</button>
 </div>
 <div class="regression-info-panel" id="regressionInfoPanel">
@@ -225,6 +225,10 @@ foreach ($variables as $var) {
 
 	runRegressionInstead.addEventListener("change", syncModelType);
 	syncModelType();
+
+	document.getElementById("configureForm").addEventListener("submit", function () {
+		syncModelType();
+	});
 
 	regressionInfoBtn.addEventListener("click", function () {
 		regressionInfoPanel.classList.toggle("visible");
