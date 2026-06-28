@@ -165,8 +165,12 @@ function r_gam_formula($y, $x, $z, $covariates, $cov_linear, $nux_x) {
 	return $y . ' ~ ' . $base;
 }
 
-function interprobe_direct_call_lines($x, $z, $y, $save_as) {
-	return array(
+function interprobe_direct_call_lines($x, $z, $y, $save_as, $with_comments = false) {
+	$lines = array();
+	if ($with_comments) {
+		$lines[] = '# Fit default GAM and probe the x * z interaction';
+	}
+	return array_merge($lines, array(
 		'interprobe(',
 		'  x = ' . r_quote($x) . ',',
 		'  z = ' . r_quote($z) . ',',
@@ -174,40 +178,66 @@ function interprobe_direct_call_lines($x, $z, $y, $save_as) {
 		'  data = data.imported,',
 		'  save.as = ' . r_quote($save_as),
 		')',
-	);
+	));
 }
 
-function interprobe_fit_call_lines($x, $z, $save_as, $fit_name) {
-	return array(
+function interprobe_fit_call_lines($x, $z, $save_as, $fit_name, $with_comments = false) {
+	$lines = array();
+	if ($with_comments) {
+		$lines[] = '# Probe the interaction with the fitted model and save the figure';
+	}
+	return array_merge($lines, array(
 		'interprobe(',
 		'  model = ' . $fit_name . ',',
 		'  x = ' . r_quote($x) . ',',
 		'  z = ' . r_quote($z) . ',',
 		'  save.as = ' . r_quote($save_as),
 		')',
-	);
+	));
 }
 
-function interprobe_analysis_lines($y, $x, $z, $model_type, $covariates, $cov_linear, $save_as, $nux_x) {
+function interprobe_analysis_lines($y, $x, $z, $model_type, $covariates, $cov_linear, $save_as, $nux_x, $with_comments = false) {
 	$lines = array();
 
 	if ($model_type === 'linear') {
+		if ($with_comments) {
+			$lines[] = '# Linear mode: if the focal predictor has only two values, recode it as a factor';
+		}
 		$lines[] = r_linear_binary_x_factor_line($x);
+		if ($with_comments) {
+			$lines[] = '';
+			$lines[] = '# Fit linear regression with ' . $x . ' * ' . $z . ' interaction';
+			if (!empty($covariates)) {
+				$lines[] = '# (plus selected covariates as additional linear predictors)';
+			}
+		}
 		$formula = r_lm_formula($y, $x, $z, $covariates);
 		$lines[] = 'm1 <- lm(' . $formula . ', data = data.imported)';
-		return array_merge($lines, interprobe_fit_call_lines($x, $z, $save_as, 'm1'));
+		if ($with_comments) {
+			$lines[] = '';
+		}
+		return array_merge($lines, interprobe_fit_call_lines($x, $z, $save_as, 'm1', $with_comments));
 	}
 
 	if (empty($covariates)) {
-		return interprobe_direct_call_lines($x, $z, $y, $save_as);
+		return interprobe_direct_call_lines($x, $z, $y, $save_as, $with_comments);
 	}
 
+	if ($with_comments) {
+		$lines[] = '# Load mgcv to fit a GAM with covariates';
+	}
 	$formula = r_gam_formula($y, $x, $z, $covariates, $cov_linear, $nux_x);
 	$fit_lines = array(
 		'library(mgcv)',
-		'fit <- gam(' . $formula . ', data = data.imported, method = "REML")',
 	);
-	return array_merge($fit_lines, interprobe_fit_call_lines($x, $z, $save_as, 'fit'));
+	if ($with_comments) {
+		$fit_lines[] = '# Fit GAM: smooth terms for x, z, interaction, and covariates (linear covariates enter as plain terms)';
+	}
+	$fit_lines[] = 'fit <- gam(' . $formula . ', data = data.imported, method = "REML")';
+	if ($with_comments) {
+		$fit_lines[] = '';
+	}
+	return array_merge($lines, $fit_lines, interprobe_fit_call_lines($x, $z, $save_as, 'fit', $with_comments));
 }
 
 function r_commands_text($y, $x, $z, $model_type, $covariates, $cov_linear, $nux_x) {
@@ -216,11 +246,14 @@ function r_commands_text($y, $x, $z, $model_type, $covariates, $cov_linear, $nux
 	if ($model_type === 'gam' && !empty($covariates)) {
 		$pkgs[] = 'mgcv';
 	}
-	$lines = r_groundhog_lines($pkgs);
+	$lines = array('# Load packages (reproducible versions via groundhog)');
+	$lines = array_merge($lines, r_groundhog_lines($pkgs));
+	$lines[] = '';
+	$lines[] = '# Import data';
 	$lines[] = 'data.imported <- import("")';
 	$lines[] = '';
 	return implode("\n", array_merge($lines, interprobe_analysis_lines(
-		$y, $x, $z, $model_type, $covariates, $cov_linear, $save_as, $nux_x
+		$y, $x, $z, $model_type, $covariates, $cov_linear, $save_as, $nux_x, true
 	)));
 }
 
