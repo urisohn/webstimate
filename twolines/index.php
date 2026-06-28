@@ -20,8 +20,38 @@ $turnstile_site_key = turnstile_site_key();
     .r-links .btn { margin: 4px 6px 4px 0; }
     .upload-section { max-width: 400px; margin: 0 auto; text-align: center; padding: 4px 0 12px; }
     .upload-section h3 { margin-top: 0; margin-bottom: 10px; font-size: 18px; font-weight: 600; }
-    .upload-panel { background: #fafbfc; border: 3px dashed #337ab7; border-radius: 6px; padding: 14px 16px; transition: border-color 0.15s, background 0.15s; cursor: pointer; }
+    .upload-panel { position: relative; background: #fafbfc; border: 3px dashed #337ab7; border-radius: 6px; padding: 14px 16px; transition: border-color 0.15s, background 0.15s; cursor: pointer; }
     .upload-panel.drag-over { border-color: #23527c; background: #eef5fc; }
+    .upload-panel.is-busy { cursor: wait; pointer-events: none; border-color: #aab; background: #f3f4f6; }
+    .upload-panel-content { transition: opacity 0.2s; }
+    .upload-panel.is-busy .upload-panel-content { opacity: 0.28; }
+    .upload-busy-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 2;
+      border-radius: 4px;
+    }
+    .upload-panel.is-busy .upload-busy-overlay { display: flex; }
+    .upload-spinner {
+      font-size: 40px;
+      color: #337ab7;
+      animation: upload-spin 0.85s linear infinite;
+    }
+    .upload-busy-text {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: #337ab7;
+    }
+    @keyframes upload-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
     .upload-icon { font-size: 34px; color: #337ab7; display: block; margin-bottom: 6px; line-height: 1; }
     .drop-prompt { padding: 0; color: #666; }
     .drop-prompt p { margin-bottom: 4px; font-size: 14px; }
@@ -89,12 +119,18 @@ $turnstile_site_key = turnstile_site_key();
   <form action="upload.php" method="post" enctype="multipart/form-data" id="uploadForm">
     <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo UPLOAD_MAX_BYTES; ?>">
     <div class="upload-panel" id="uploadDropzone">
-      <span class="glyphicon glyphicon-cloud-upload upload-icon" aria-hidden="true"></span>
-      <div class="drop-prompt">
-        <p>Drag and drop your file here</p>
-        <label for="fileToUpload" class="choose-file-link">Choose file</label>
-        <input type="file" name="fileToUpload" id="fileToUpload" style="display:none">
-        <p class="file-name" id="fileName"></p>
+      <div class="upload-panel-content">
+        <span class="glyphicon glyphicon-cloud-upload upload-icon" aria-hidden="true"></span>
+        <div class="drop-prompt">
+          <p>Drag and drop your file here</p>
+          <label for="fileToUpload" class="choose-file-link">Choose file</label>
+          <input type="file" name="fileToUpload" id="fileToUpload" style="display:none">
+          <p class="file-name" id="fileName"></p>
+        </div>
+      </div>
+      <div class="upload-busy-overlay" id="uploadBusyOverlay" aria-hidden="true">
+        <span class="glyphicon glyphicon-refresh upload-spinner" aria-hidden="true"></span>
+        <p class="upload-busy-text" id="uploadBusyText"></p>
       </div>
     </div>
     <div class="turnstile-wrap">
@@ -114,6 +150,8 @@ $turnstile_site_key = turnstile_site_key();
   var form = document.getElementById("uploadForm");
   var fileInput = document.getElementById("fileToUpload");
   var fileName = document.getElementById("fileName");
+  var uploadBusyOverlay = document.getElementById("uploadBusyOverlay");
+  var uploadBusyText = document.getElementById("uploadBusyText");
   var pendingFile = null;
   var turnstileWidgetId = null;
   var verifyTimeoutId = null;
@@ -124,8 +162,22 @@ $turnstile_site_key = turnstile_site_key();
     return file && file.size > uploadMaxBytes;
   }
 
+  function setUploadBusy(busy, message) {
+    if (busy) {
+      dropzone.classList.add("is-busy");
+      dropzone.classList.remove("drag-over");
+      uploadBusyText.textContent = message || "Uploading\u2026";
+      uploadBusyOverlay.setAttribute("aria-hidden", "false");
+    } else {
+      dropzone.classList.remove("is-busy");
+      uploadBusyText.textContent = "";
+      uploadBusyOverlay.setAttribute("aria-hidden", "true");
+    }
+  }
+
   function showFileTooLarge() {
     pendingFile = null;
+    setUploadBusy(false);
     fileName.textContent = uploadMaxMessage;
   }
 
@@ -137,6 +189,7 @@ $turnstile_site_key = turnstile_site_key();
   function showTurnstileHelp() {
     clearVerifyTimeout();
     pendingFile = null;
+    setUploadBusy(false);
     fileName.textContent = "";
     if (turnstileWidgetId !== null && typeof turnstile !== "undefined") {
       turnstile.reset(turnstileWidgetId);
@@ -156,10 +209,12 @@ $turnstile_site_key = turnstile_site_key();
   function submitPendingFile() {
     if (!pendingFile) return;
     clearVerifyTimeout();
+    var uploadingName = pendingFile.name;
     var dt = new DataTransfer();
     dt.items.add(pendingFile);
     fileInput.files = dt.files;
-    fileName.textContent = "Uploading " + pendingFile.name + "\u2026";
+    fileName.textContent = "";
+    setUploadBusy(true, "Uploading " + uploadingName + "\u2026");
     pendingFile = null;
     form.submit();
   }
@@ -193,11 +248,12 @@ $turnstile_site_key = turnstile_site_key();
       return;
     }
     pendingFile = file;
+    fileName.textContent = "";
+    setUploadBusy(true, "Uploading " + file.name + "\u2026");
     if (getTurnstileToken()) {
       submitPendingFile();
       return;
     }
-    fileName.textContent = "Verifying\u2026";
     if (typeof turnstile === "undefined") {
       showTurnstileHelp();
       return;
