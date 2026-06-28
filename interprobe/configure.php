@@ -92,13 +92,8 @@ $dir_data = $_SESSION['dir_data'];
 $time     = $_SESSION['time'];
 $extension= $_SESSION['extension'];
 
-$original_file = interprobe_resolve_original_filename(
-	$dir_data,
-	$file,
-	$time,
-	null,
-	isset($_SESSION['original_file']) ? $_SESSION['original_file'] : null
-);
+$original_file = interprobe_get_original_filename($dir_data, $dir, $file, $time);
+interprobe_store_original_filename_in_session($original_file);
 
 if (!file_exists($dir_data.$file)) {
 	die("Sorry, the file was not uploaded. Please try again.");

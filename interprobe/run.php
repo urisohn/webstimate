@@ -78,13 +78,14 @@ $time      = $_SESSION['time'];
 $extension = $_SESSION['extension'];
 $variables = isset($_SESSION['variables']) ? $_SESSION['variables'] : array();
 
-$original_file = interprobe_resolve_original_filename(
+$original_file = interprobe_get_original_filename(
 	$dir_data,
+	$dir,
 	$file,
 	$time,
-	isset($_POST['original_file']) ? $_POST['original_file'] : null,
-	isset($_SESSION['original_file']) ? $_SESSION['original_file'] : null
+	isset($_POST['original_file']) ? $_POST['original_file'] : null
 );
+interprobe_store_original_filename_in_session($original_file);
 
 $y = isset($_POST['y']) ? $_POST['y'] : '';
 $x = isset($_POST['x']) ? $_POST['x'] : '';
