@@ -128,6 +128,11 @@ function r_groundhog_lines($pkgs) {
 	);
 }
 
+function r_linear_binary_x_factor_line($x) {
+	$x_q = r_quote($x);
+	return 'if (length(unique(data.imported[[' . $x_q . ']])) == 2) data.imported[[' . $x_q . ']] <- factor(data.imported[[' . $x_q . ']])';
+}
+
 function r_lm_formula($y, $x, $z, $covariates) {
 	$rhs = $x . ' * ' . $z;
 	if (!empty($covariates)) {
@@ -184,22 +189,27 @@ function interprobe_fit_call_lines($x, $z, $save_as, $fit_name) {
 }
 
 function interprobe_analysis_lines($y, $x, $z, $model_type, $covariates, $cov_linear, $save_as, $nux_x) {
+	$lines = array();
+	if ($model_type === 'linear') {
+		$lines[] = r_linear_binary_x_factor_line($x);
+	}
+
 	if (empty($covariates)) {
-		return interprobe_direct_call_lines($x, $z, $y, $save_as, $model_type);
+		return array_merge($lines, interprobe_direct_call_lines($x, $z, $y, $save_as, $model_type));
 	}
 
 	if ($model_type === 'linear') {
 		$formula = r_lm_formula($y, $x, $z, $covariates);
-		$lines = array('m1 <- lm(' . $formula . ', data = data.imported)');
-		return array_merge($lines, interprobe_fit_call_lines($x, $z, $save_as, 'm1'));
+		$fit_lines = array('m1 <- lm(' . $formula . ', data = data.imported)');
+		return array_merge($lines, $fit_lines, interprobe_fit_call_lines($x, $z, $save_as, 'm1'));
 	}
 
 	$formula = r_gam_formula($y, $x, $z, $covariates, $cov_linear, $nux_x);
-	$lines = array(
+	$fit_lines = array(
 		'library(mgcv)',
 		'fit <- gam(' . $formula . ', data = data.imported, method = "REML")',
 	);
-	return array_merge($lines, interprobe_fit_call_lines($x, $z, $save_as, 'fit'));
+	return array_merge($lines, $fit_lines, interprobe_fit_call_lines($x, $z, $save_as, 'fit'));
 }
 
 function r_commands_text($y, $x, $z, $model_type, $covariates, $cov_linear, $nux_x) {
