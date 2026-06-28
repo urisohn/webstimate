@@ -5,6 +5,7 @@ verify_turnstile_or_die('index.php');
 require_once __DIR__ . '/../includes/job_traffic.php';
 job_traffic_check_or_die('index.php');
 require_once __DIR__ . '/../includes/upload_limits.php';
+require_once __DIR__ . '/../includes/interprobe_upload.php';
 
 $upload_errors = array(
 	UPLOAD_ERR_INI_SIZE   => "file exceeds upload_max_filesize in php.ini",
@@ -61,7 +62,7 @@ if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target)) {
 	$_SESSION['original_file'] = $user_file;
 	$_SESSION['time'] = $time;
 	$_SESSION['extension'] = $file_type;
-	file_put_contents($dir_data . $time . '.origname', $user_file);
+	interprobe_save_original_filename($dir_data, $file, $time, $user_file);
 	echo ('<meta http-equiv="refresh" content="0; url=configure.php">');
 } else {
 	die("Sorry, there was an error saving your file to: $target");

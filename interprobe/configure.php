@@ -2,6 +2,7 @@
 session_start();
 error_reporting(E_ALL);
 require_once __DIR__ . '/../includes/r_output.php';
+require_once __DIR__ . '/../includes/interprobe_upload.php';
 ?>
 <head>
   <title>Johnson-Neyman 2.0: Online App for Nonlinear Probing of Interactions</title>
@@ -91,14 +92,13 @@ $dir_data = $_SESSION['dir_data'];
 $time     = $_SESSION['time'];
 $extension= $_SESSION['extension'];
 
-$original_file = isset($_SESSION['original_file']) ? $_SESSION['original_file'] : $file;
-$origname_file = $dir_data . $time . '.origname';
-if (file_exists($origname_file)) {
-	$stored_name = trim(file_get_contents($origname_file));
-	if ($stored_name !== '') {
-		$original_file = $stored_name;
-	}
-}
+$original_file = interprobe_resolve_original_filename(
+	$dir_data,
+	$file,
+	$time,
+	null,
+	isset($_SESSION['original_file']) ? $_SESSION['original_file'] : null
+);
 
 if (!file_exists($dir_data.$file)) {
 	die("Sorry, the file was not uploaded. Please try again.");

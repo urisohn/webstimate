@@ -2,6 +2,7 @@
 session_start();
 require_once __DIR__ . '/../includes/job_traffic.php';
 require_once __DIR__ . '/../includes/r_output.php';
+require_once __DIR__ . '/../includes/interprobe_upload.php';
 job_traffic_check_and_record_or_die('configure.php');
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
@@ -77,24 +78,13 @@ $time      = $_SESSION['time'];
 $extension = $_SESSION['extension'];
 $variables = isset($_SESSION['variables']) ? $_SESSION['variables'] : array();
 
-function resolve_original_filename($file, $time, $dir_data) {
-	if (isset($_POST['original_file']) && $_POST['original_file'] !== '') {
-		return basename($_POST['original_file']);
-	}
-	if (isset($_SESSION['original_file']) && $_SESSION['original_file'] !== '') {
-		return basename($_SESSION['original_file']);
-	}
-	$origname_file = $dir_data . $time . '.origname';
-	if (file_exists($origname_file)) {
-		$stored_name = trim(file_get_contents($origname_file));
-		if ($stored_name !== '') {
-			return basename($stored_name);
-		}
-	}
-	return basename($file);
-}
-
-$original_file = resolve_original_filename($file, $time, $dir_data);
+$original_file = interprobe_resolve_original_filename(
+	$dir_data,
+	$file,
+	$time,
+	isset($_POST['original_file']) ? $_POST['original_file'] : null,
+	isset($_SESSION['original_file']) ? $_SESSION['original_file'] : null
+);
 
 $y = isset($_POST['y']) ? $_POST['y'] : '';
 $x = isset($_POST['x']) ? $_POST['x'] : '';
