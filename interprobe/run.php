@@ -165,20 +165,16 @@ function r_gam_formula($y, $x, $z, $covariates, $cov_linear, $nux_x) {
 	return $y . ' ~ ' . $base;
 }
 
-function interprobe_direct_call_lines($x, $z, $y, $save_as, $model_type) {
-	$lines = array(
+function interprobe_direct_call_lines($x, $z, $y, $save_as) {
+	return array(
 		'interprobe(',
 		'  x = ' . r_quote($x) . ',',
 		'  z = ' . r_quote($z) . ',',
 		'  y = ' . r_quote($y) . ',',
 		'  data = data.imported,',
+		'  save.as = ' . r_quote($save_as),
+		')',
 	);
-	if ($model_type === 'linear') {
-		$lines[] = '  model = "linear",';
-	}
-	$lines[] = '  save.as = ' . r_quote($save_as);
-	$lines[] = ')';
-	return $lines;
 }
 
 function interprobe_fit_call_lines($x, $z, $save_as, $fit_name) {
@@ -194,18 +190,16 @@ function interprobe_fit_call_lines($x, $z, $save_as, $fit_name) {
 
 function interprobe_analysis_lines($y, $x, $z, $model_type, $covariates, $cov_linear, $save_as, $nux_x) {
 	$lines = array();
+
 	if ($model_type === 'linear') {
 		$lines[] = r_linear_binary_x_factor_line($x);
+		$formula = r_lm_formula($y, $x, $z, $covariates);
+		$lines[] = 'm1 <- lm(' . $formula . ', data = data.imported)';
+		return array_merge($lines, interprobe_fit_call_lines($x, $z, $save_as, 'm1'));
 	}
 
 	if (empty($covariates)) {
-		return array_merge($lines, interprobe_direct_call_lines($x, $z, $y, $save_as, $model_type));
-	}
-
-	if ($model_type === 'linear') {
-		$formula = r_lm_formula($y, $x, $z, $covariates);
-		$fit_lines = array('m1 <- lm(' . $formula . ', data = data.imported)');
-		return array_merge($lines, $fit_lines, interprobe_fit_call_lines($x, $z, $save_as, 'm1'));
+		return interprobe_direct_call_lines($x, $z, $y, $save_as);
 	}
 
 	$formula = r_gam_formula($y, $x, $z, $covariates, $cov_linear, $nux_x);
@@ -213,7 +207,7 @@ function interprobe_analysis_lines($y, $x, $z, $model_type, $covariates, $cov_li
 		'library(mgcv)',
 		'fit <- gam(' . $formula . ', data = data.imported, method = "REML")',
 	);
-	return array_merge($lines, $fit_lines, interprobe_fit_call_lines($x, $z, $save_as, 'fit'));
+	return array_merge($fit_lines, interprobe_fit_call_lines($x, $z, $save_as, 'fit'));
 }
 
 function r_commands_text($y, $x, $z, $model_type, $covariates, $cov_linear, $nux_x) {
